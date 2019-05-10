@@ -20,7 +20,10 @@ public class SalvoController {
 
     @RequestMapping("/games")
     public List<Object> getGamesId() {
-        return gameRepository.findAll().stream().map(game -> makeGameDTO(game)).collect(toList());
+        return gamePlayerRepository
+                .findAll()
+                .stream()
+                .map(game -> makeGameDTO(game)).collect(toList());
     }
 
     @RequestMapping("/game_view")
@@ -31,70 +34,24 @@ public class SalvoController {
                 .map(game -> makeGamePlayerDTO(game)).collect(toList());
     }
 
-    /*
-    //Obtiene el objeto json data transfer con los barcos de un juego en particular, necesita saber cual es el game player en particular
     @RequestMapping("/game_view/{id}")
     private Map<String, Object> getGames(@PathVariable Long id) {
+        return makeGameDTO(gamePlayerRepository.findById(id).get());
+    }
+
+    private Map<String, Object> makeGameDTO(GamePlayer gamePlayer) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        Game g = gameRepository.getOne(id) ;
-        dto.put("id", g.getId());
-        dto.put("gamePlayers", g.getGamePlayers().
-                stream()
-                .map(gamePlayer -> makeGamePlayerDTO(gamePlayer))
-                .collect(toList()));
-        return dto;
-    }
-    */
-
-    @RequestMapping("/game_view/{id}")
-    private Map<String, Object> getGames(@PathVariable Long id) {
-
-        return makeGamePlayerDTO(gamePlayerRepository.findById(id).get());
-    }
-
-
-    @RequestMapping("/game_view2/{id}")
-    private Map<String, Object> getGames2(@PathVariable Long id) {
-        System.out.println(gamePlayerRepository.findById(id).get());
-        return  makeGamePlayerDTO(gamePlayerRepository.findById(id).get());
-    }
-
-
-    private Map<String, Object> makeGameDTO(Game game) {
-        Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("id", game.getId());
-        dto.put("creationDate", game.getCreationDate());
-        dto.put("gamePlayers", game.getGamePlayers().
-                stream()
-                .map(gamePlayer -> makeGamePlayerDTO(gamePlayer))
-                .collect(toList()));
-        dto.put("ships", game.getGamePlayers().
-                stream()
-                .map(gamePlayer -> makeShipDTO(gamePlayer.getShips()))
-                .collect(toList()));
+        dto.put("id", gamePlayer.getId());
+        dto.put("creationDate", gamePlayer.getDate().getTime());
+        dto.put("gamePlayers", getGamePlayerList(gamePlayer.getGame().getGamePlayers()));
+        dto.put("ships", gamePlayer.getShips());
         return dto;
     }
 
-    private Map<String, Object> makeShipDTO(Set<Ship> ships) {
+    private Map<String, Object> makeGamePlayerDTO(GamePlayer gamePlayer) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        for(Ship s: ships){
-            dto.put("type", s.getType());
-            dto.put("locations", s.getShipLocations());
-        }
-        return dto;
-    }
-
-    private Map<String, Object> makeShipDTO2(Ship ship) {
-        Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("type", ship.getType());
-        dto.put("locations", ship.getShipLocations());
-        return dto;
-    }
-
-    private Map<String, Object> makeGamePlayerDTO(GamePlayer gamep) {
-        Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("id", gamep.getId());
-        dto.put("player", makePlayerDTO(gamep.getPlayer()));
+        dto.put("id", gamePlayer.getId());
+        dto.put("player", makePlayerDTO(gamePlayer.getPlayer()));
         return dto;
     }
 
@@ -105,6 +62,11 @@ public class SalvoController {
         return dto;
     }
 
-
+    private List<Map<String, Object>> getGamePlayerList(Set<GamePlayer> gamePlayers){
+        return gamePlayers
+                .stream()
+                .map(gamePlayer -> makeGamePlayerDTO(gamePlayer))
+                .collect(toList());
+    }
 
 }

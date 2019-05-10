@@ -4,12 +4,12 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toList;
 
-//Transforma en la tabla en una clase, lo tgrata como sql
 @Entity
 public class Game {
 
@@ -20,7 +20,7 @@ public class Game {
     private Date creationDate;
 
     @OneToMany(mappedBy="game", fetch= FetchType.EAGER)
-    Set<GamePlayer> gamePlayers;
+    Set<GamePlayer> gamePlayers = new HashSet<>();
 
     public Game(Date creationDate) {
         this.creationDate = creationDate;

@@ -24,7 +24,7 @@ function loadData(){
                 })
             });
         })
-        .fail(function( jqXHR, textStatus ) {
+        .fail(function( jqXHR, textSlotatus ) {
           alert( "Failed: " + textStatus );
         });
 };

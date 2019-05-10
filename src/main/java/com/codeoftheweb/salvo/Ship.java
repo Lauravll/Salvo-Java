@@ -1,5 +1,6 @@
 package com.codeoftheweb.salvo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -24,15 +25,15 @@ public class Ship {
     private GamePlayer gameplayer;
 
     @ElementCollection
-    @Column(name="Locations")
-    private List<String> shipLocations = new ArrayList<>();
+    @Column(name="locations")
+    private List<String> locations = new ArrayList<>();
 
     public Ship(){}
 
-    public Ship(String type, GamePlayer gameplayer, List<String> shipLocations) {
-        this.gameplayer = gameplayer;
+    public Ship(String type, GamePlayer gameplayer, List<String> locations) {
         this.type = type;
-        this.shipLocations = shipLocations;
+        this.gameplayer = gameplayer;
+        this.locations = locations;
     }
 
     public Long getId() {
@@ -43,6 +44,7 @@ public class Ship {
         this.id = id;
     }
 
+    @JsonIgnore
     public GamePlayer getGameplayer() {
         return gameplayer;
     }
@@ -59,11 +61,11 @@ public class Ship {
         this.type = type;
     }
 
-    public List<String> getShipLocations() {
-        return shipLocations;
+    public List<String> getLocations() {
+        return locations;
     }
 
-    public void setShipLocations(List<String> shipLocations) {
-        this.shipLocations = shipLocations;
+    public void setLocations(List<String> locations) {
+        this.locations = locations;
     }
 }

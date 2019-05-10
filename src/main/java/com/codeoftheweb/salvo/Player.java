@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import static java.util.stream.Collectors.toList;
@@ -19,7 +20,7 @@ public class Player {
     private String password;
 
     @OneToMany( mappedBy="player", fetch=FetchType.EAGER)
-    private Set<GamePlayer> gamePlayers;
+    private Set<GamePlayer> gamePlayers  = new HashSet<>();
 
     public Player() {}
 
