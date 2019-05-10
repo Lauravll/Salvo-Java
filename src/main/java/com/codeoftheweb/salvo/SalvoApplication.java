@@ -71,6 +71,7 @@ public class SalvoApplication {
 			repository4.save(s3);
 			repository4.save(s4);
 
+			//agrego barco
 			gp.addShip(s5);
 
 
