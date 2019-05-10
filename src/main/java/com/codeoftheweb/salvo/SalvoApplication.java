@@ -17,6 +17,8 @@ public class SalvoApplication {
 		SpringApplication.run(SalvoApplication.class, args);
 	}
 
+	//Marca tareas prioritarias para el springboot, va invocando secuencialmetne clases . Por eso las entity los carga primero y los trata como tabla, y los autowired que asume que estan relacionados con otros objetos
+	//Antes de que arranque la ejecucion
 	@Bean
 	public CommandLineRunner initData(PlayerRepository repository, GameRepository repository2, GamePlayerRepository repository3, ShipRepository repository4) {
 
@@ -54,17 +56,22 @@ public class SalvoApplication {
 			List<String> shipLocations1 = new ArrayList<>();
 			shipLocations1.add("A1");
 			shipLocations1.add("H1");
+			shipLocations1.add("H2");
+			shipLocations1.add("H3");
 
 
-			Ship s = new Ship("destroyer", gp, shipLocations1);
-			Ship s2 = new Ship("submarine", gp2, shipLocations1);
-			Ship s3 = new Ship("", gp3, shipLocations1);
-			Ship s4 = new Ship("", gp3, shipLocations1);
+			Ship s = new Ship("Patrol Boat", gp, shipLocations1);
+			Ship s2 = new Ship("Submarine", gp2, shipLocations1);
+			Ship s3 = new Ship("Destroyer", gp3, shipLocations1);
+			Ship s4 = new Ship("Destroyer", gp3, shipLocations1);
+			Ship s5 = new Ship("Destroyer", gp3, shipLocations1);
 
 			repository4.save(s);
 			repository4.save(s2);
 			repository4.save(s3);
 			repository4.save(s4);
+
+			gp.addShip(s5);
 
 
 		};

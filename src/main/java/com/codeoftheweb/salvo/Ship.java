@@ -59,4 +59,11 @@ public class Ship {
         this.type = type;
     }
 
+    public List<String> getShipLocations() {
+        return shipLocations;
+    }
+
+    public void setShipLocations(List<String> shipLocations) {
+        this.shipLocations = shipLocations;
+    }
 }

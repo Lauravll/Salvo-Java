@@ -9,6 +9,7 @@ import java.util.Set;
 
 import static java.util.stream.Collectors.toList;
 
+//Transforma en la tabla en una clase, lo tgrata como sql
 @Entity
 public class Game {
 
