@@ -4,9 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
 import static java.util.stream.Collectors.toList;
 
 @Entity
@@ -61,8 +60,32 @@ public class Player {
         gamePlayers.add(gamePlayer);
     }
 
+    public void addScore(Score score) {
+        score.setPlayer(this);
+        scores.add(score);
+    }
+
+    public Set<Score> getScores() {
+        return scores;
+    }
+
+    public Set<Score> getScore(Game game) {
+        Set<Score> s = new HashSet<Score>();
+        game.getScores().forEach(score -> s.add(score));
+        return s;
+    }
+
+    public void setScores(Set<Score> scores) {
+        this.scores = scores;
+    }
+
     @JsonIgnore
     public List<Game> getGames() {
+        return gamePlayers.stream().map(sub -> sub.getGame()).collect(toList());
+    }
+
+    @JsonIgnore
+    public List<Game> getGamess() {
         return gamePlayers.stream().map(sub -> sub.getGame()).collect(toList());
     }
 

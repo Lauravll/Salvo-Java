@@ -9,23 +9,31 @@ import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
+//Un controlador en Spring es una clase con métodos para ejecutarse cuando se reciben solicitudes con patrones de URL específico
+//facilita la definición de un servicio web que devuelve recursos JSON personalizados a un cliente en lugar de HTML
 @RestController
 @RequestMapping("/api")
 public class SalvoController {
 
+    //have one singleton instance that every class shares.
+    //ells Spring to automatically create an instance of PersonRepository and store it in the instance variable personRepository.
     @Autowired
     private GameRepository gameRepository;
     @Autowired
     private GamePlayerRepository gamePlayerRepository;
     @Autowired
     private SalvoRepository salvoRepository;
+    @Autowired
+    private ScoreRepository scoreRepository;
+    @Autowired
+    private PlayerRepository playerRepository;
 
     @RequestMapping("/games")
     public List<Object> getGamesId() {
         return gamePlayerRepository
                 .findAll()
                 .stream()
-                .map(game -> makeGameDTO(game)).collect(toList());
+                .map(game -> makeGamePlayerDTO(game)).collect(toList());
     }
 
     @RequestMapping("/game_view")
@@ -41,6 +49,15 @@ public class SalvoController {
         return makeGameDTO(gamePlayerRepository.findById(id).get());
     }
 
+    @RequestMapping("/leaderBoard")
+    public List<Object> getScores() {
+        return scoreRepository
+                .findAll()
+                .stream()
+                .map(score -> makeScoreDTO(score)).collect(toList());
+    }
+
+    //Un objeto de transferencia de datos (DTO) es una estructura de Java creada solo para organizar los datos para transferirlos a otro sistema. Se crea según sea necesario, sin información irrelevante o privada, y sin referencias circulares.
     private Map<String, Object> makeGameDTO(GamePlayer gamePlayer) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", gamePlayer.getId());
@@ -48,6 +65,7 @@ public class SalvoController {
         dto.put("gamePlayers", getGamePlayerList(gamePlayer.getGame().getGamePlayers()));
         dto.put("ships", gamePlayer.getShips());
         dto.put("salvoes", getSalvoList(gamePlayer.getGame()));
+
         //dto.put("salvoes3", getSalvoList2(gamePlayer.getGame()));
         return dto;
     }
@@ -71,6 +89,7 @@ public class SalvoController {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", player.getId());
         dto.put("email", player.getEmail());
+        dto.put("scores", getScoreList(player.getScores()));
         return dto;
     }
 
@@ -107,5 +126,32 @@ public class SalvoController {
         return myList;
     }
 
+
+    private List<Map<String, Object>> getScoreList(Set<Score> scores){
+        return scores
+                .stream()
+                .map(score -> makeScoreDTO(score))
+                .collect(toList());
+    }
+
+    //1) Método -> Crear lista de distintos players
+    private List<Map<String,Object>> gePlayerList(){
+        return playerRepository
+                .findAll()
+                .stream()
+                .map(player -> makePlayerDTO(player)).collect(toList());
+    }
+
+    private Map<String, Object> makeScoreDTO(Score score) {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("id", score.getId());
+        //dto.put("player", makePlayerDTO(score.getPlayer()));
+        dto.put("finishDate", score.getFinishDate());
+        dto.put("totalScore", score.getScore());
+        dto.put("wins", score.getScore());
+        dto.put("losses", score.getScore());
+        dto.put("ties", score.getScore());
+        return dto;
+    }
 
 }
