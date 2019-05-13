@@ -22,6 +22,9 @@ public class Player {
     @OneToMany( mappedBy="player", fetch=FetchType.EAGER)
     private Set<GamePlayer> gamePlayers  = new HashSet<>();
 
+    @OneToMany( mappedBy="player", fetch=FetchType.EAGER)
+    private Set<Score> scores  = new HashSet<>();
+
     public Player() {}
 
     public Player(String email, String password) {
@@ -63,5 +66,14 @@ public class Player {
         return gamePlayers.stream().map(sub -> sub.getGame()).collect(toList());
     }
 
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }
 

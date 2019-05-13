@@ -1,37 +1,36 @@
 package com.codeoftheweb.salvo;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
-
-import static java.util.stream.Collectors.toList;
 
 @Entity
-public class Ship {
+public class Salvo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
-    private String type;
+    private int turn;
 
     @ManyToOne( fetch = FetchType.EAGER)
     @JoinColumn(name="gamePlayer_id")
     private GamePlayer gameplayer;
 
     @ElementCollection
-    @Column(name="locations")
+    @CollectionTable(name="salvoLocation")
+    @Column(name="shipLocation_id")
     private List<String> locations = new ArrayList<>();
 
-    public Ship(){}
+    public Salvo() {
+    }
 
-    public Ship(String type, GamePlayer gameplayer, List<String> locations) {
-        this.type = type;
+    public Salvo(int turn, GamePlayer gameplayer, List<String> locations) {
+        this.turn = turn;
         this.gameplayer = gameplayer;
         this.locations = locations;
     }
@@ -40,8 +39,8 @@ public class Ship {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public int getTurn() {
+        return turn;
     }
 
     @JsonIgnore
@@ -49,20 +48,20 @@ public class Ship {
         return gameplayer;
     }
 
-    public void setGameplayer(GamePlayer gameplayer) {
-        this.gameplayer = gameplayer;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public List<String> getLocations() {
         return locations;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setTurn(int turn) {
+        this.turn = turn;
+    }
+
+    public void setGameplayer(GamePlayer gameplayer) {
+        this.gameplayer = gameplayer;
     }
 
     public void setLocations(List<String> locations) {

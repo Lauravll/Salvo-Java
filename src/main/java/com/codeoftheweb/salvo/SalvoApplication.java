@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class SalvoApplication {
 	//Marca tareas prioritarias para el springboot, va invocando secuencialmetne clases . Por eso las entity los carga primero y los trata como tabla, y los autowired que asume que estan relacionados con otros objetos
 	//Antes de que arranque la ejecucion
 	@Bean
-	public CommandLineRunner initData(PlayerRepository playerRepository, GameRepository gameRepository, GamePlayerRepository repository3, ShipRepository repository4) {
+	public CommandLineRunner initData(PlayerRepository playerRepository, GameRepository gameRepository, GamePlayerRepository gamePlayerRepository, ShipRepository shipRepository, SalvoRepository salvoRepository ){
 
 		return (args) -> {
 
@@ -43,17 +44,15 @@ public class SalvoApplication {
 			gameRepository.save(g2);
 			gameRepository.save(g3);
 
-			GamePlayer gp = new GamePlayer(p1, g, date);
-			GamePlayer gp2 = new GamePlayer(p2, g, date);
-			GamePlayer gp4 = new GamePlayer(p3, g2, date);
-			GamePlayer gp3 = new GamePlayer(p2, g2, newDate);
+			GamePlayer gamePlayer = new GamePlayer(p1, g, date);
+			GamePlayer gamePlayer2 = new GamePlayer(p2, g, date);
+			GamePlayer gamePlayer3 = new GamePlayer(p3, g2, date);
+			GamePlayer gamePlayer4 = new GamePlayer(p2, g2, newDate);
 
-			repository3.save(gp);
-			repository3.save(gp2);
-			repository3.save(gp3);
-			repository3.save(gp4);
-
-			g.addGamePlayer(gp);
+			gamePlayerRepository.save(gamePlayer);
+			gamePlayerRepository.save(gamePlayer2);
+			gamePlayerRepository.save(gamePlayer3);
+			gamePlayerRepository.save(gamePlayer4);
 
 			List<String> shipLocations1 = new ArrayList<>();
 			shipLocations1.add("H4");
@@ -70,26 +69,49 @@ public class SalvoApplication {
 			shipLocations3.add("B1");
 
 			List<String> shipLocations4 = new ArrayList<>();
-			shipLocations4.add("H1");
+			shipLocations4.add("H");
 			shipLocations4.add("I1");
 			shipLocations4.add("J1");
 
 
-			Ship s = new Ship("Patrol Boat", gp2, shipLocations1);
-			Ship s2 = new Ship("Submarine", gp2, shipLocations2);
-			Ship s3 = new Ship("Destroyer", gp, shipLocations3);
-			Ship s4 = new Ship("Carrier", gp, shipLocations4);
+			Ship s = new Ship("Patrol Boat", gamePlayer2, shipLocations1);
+			Ship s2 = new Ship("Submarine", gamePlayer, shipLocations2);
+			Ship s3 = new Ship("Destroyer", gamePlayer2, shipLocations3);
+			Ship s4 = new Ship("Carrier", gamePlayer, shipLocations4);
 
-			repository4.save(s);
-			repository4.save(s2);
-			repository4.save(s3);
-			repository4.save(s4);
+
+			shipRepository.save(s);
+			shipRepository.save(s2);
+			shipRepository.save(s3);
+			shipRepository.save(s4);
 
 			//agrego barco
-			gp.addShip(s3);
-			gp2.addShip(s2);
-			gp2.addShip(s);
-			gp.addShip(s4);
+			gamePlayer.addShip(s3);
+			gamePlayer2.addShip(s2);
+			gamePlayer3.addShip(s);
+			gamePlayer4.addShip(s4);
+
+
+			List<String> salvoLocations = new ArrayList<>();
+			salvoLocations.add("H");
+
+			List<String> salvoLocations2 = Arrays.asList("A2", "A3");
+
+			List<String> salvoLocations3 = new ArrayList<>();
+			salvoLocations3.add("A1");
+
+			//Juego 1
+			Salvo salvo = new Salvo(1, gamePlayer2, salvoLocations );
+			Salvo salvo2 = new Salvo(2, gamePlayer, salvoLocations2 );
+			Salvo salvo3 = new Salvo(2, gamePlayer, salvoLocations3 );
+
+			//Juego 2
+			Salvo salvo4 = new Salvo(2, gamePlayer3, salvoLocations2 );
+
+			salvoRepository.save(salvo);
+			salvoRepository.save(salvo2);
+			salvoRepository.save(salvo3);
+			salvoRepository.save(salvo4);
 
 
 		};
