@@ -68,11 +68,44 @@ public class Player {
     public Set<Score> getScores() {
         return scores;
     }
+/*
+    public Score getScore(Game game) {
+        return
+        scores
+                .stream()
+                .filter(score -> score.getGame().getId() == game.getId()).findAny()
+                .orElse(null);
+    }
+*/
+    //2) Método -> Retorna todos los scores del player
+    public float getScore(){
+        return getWins(this.getScores())*1
+                + getTies(this.getScores())*((float)0.5)
+                + getLosses(this.getScores())*0;
+    }
 
-    public Set<Score> getScore(Game game) {
-        Set<Score> s = new HashSet<Score>();
-        game.getScores().forEach(score -> s.add(score));
-        return s;
+    //3) Método -> Retorna todos los wins del player
+    public float getWins(Set<Score> scores){
+        return scores
+                .stream()
+                .filter(score -> score.getScore() == 1)
+                .count();
+    }
+
+    //4) Método -> Retorna todos los ties del player
+    public float getTies(Set<Score> scores){
+        return scores
+                .stream()
+                .filter(score -> score.getScore() == (float)0.5)
+                .count();
+    }
+
+    //5) Método -> Retorna todos los losses del player
+    public float getLosses(Set<Score> scores){
+        return scores
+                .stream()
+                .filter(score -> score.getScore() == 0)
+                .count();
     }
 
     public void setScores(Set<Score> scores) {

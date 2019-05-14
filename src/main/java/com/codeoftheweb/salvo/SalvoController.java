@@ -29,11 +29,11 @@ public class SalvoController {
     private PlayerRepository playerRepository;
 
     @RequestMapping("/games")
-    public List<Object> getGamesId() {
-        return gamePlayerRepository
+    public List<Object> getGames2() {
+        return gameRepository
                 .findAll()
                 .stream()
-                .map(game -> makeGamePlayerDTO(game)).collect(toList());
+                .map(game -> makeGameDTO(game)).collect(toList());
     }
 
     @RequestMapping("/game_view")
@@ -46,27 +46,37 @@ public class SalvoController {
 
     @RequestMapping("/game_view/{id}")
     private Map<String, Object> getGames(@PathVariable Long id) {
-        return makeGameDTO(gamePlayerRepository.findById(id).get());
+        return  gameViewDTO(gamePlayerRepository.findById(id).get());
     }
 
+    //players
     @RequestMapping("/leaderBoard")
     public List<Object> getScores() {
-        return scoreRepository
-                .findAll()
-                .stream()
-                .map(score -> makeScoreDTO(score)).collect(toList());
+
+        return getPlayerList();
     }
 
     //Un objeto de transferencia de datos (DTO) es una estructura de Java creada solo para organizar los datos para transferirlos a otro sistema. Se crea según sea necesario, sin información irrelevante o privada, y sin referencias circulares.
-    private Map<String, Object> makeGameDTO(GamePlayer gamePlayer) {
+    private Map<String, Object> makeGameDTO(Game game) {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("id", game.getId());
+        dto.put("creationDate", game.getCreationDate().getTime());
+       dto.put("gamePlayers", getGamePlayerList(game.getGamePlayers())); //playerlit
+
+
+        //dto.put("ships", gamePlayer.getShips());
+        //dto.put("salvoes", getSalvoList(gamePlayer.getGame()));
+        dto.put("score", getScoreList(game.getScores()));
+        return dto;
+    }
+
+    private Map<String, Object> gameViewDTO(GamePlayer gamePlayer) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", gamePlayer.getId());
         dto.put("creationDate", gamePlayer.getDate().getTime());
         dto.put("gamePlayers", getGamePlayerList(gamePlayer.getGame().getGamePlayers()));
         dto.put("ships", gamePlayer.getShips());
         dto.put("salvoes", getSalvoList(gamePlayer.getGame()));
-
-        //dto.put("salvoes3", getSalvoList2(gamePlayer.getGame()));
         return dto;
     }
 
@@ -76,7 +86,15 @@ public class SalvoController {
         dto.put("player", makePlayerDTO(gamePlayer.getPlayer()));
         return dto;
     }
-
+/*
+    private Map<String, Object> makeLeaderBoardDTO(Player player) {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("id", player.getId());
+        dto.put("email", player.getEmail());
+        dto.put("score", makeScoreDTO(player));
+        return dto;
+    }
+*/
     private Map<String, Object> makeSalvoDTO(Salvo salvo) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("turn", salvo.getId());
@@ -89,7 +107,7 @@ public class SalvoController {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", player.getId());
         dto.put("email", player.getEmail());
-        dto.put("scores", getScoreList(player.getScores()));
+        dto.put("score", makeScoreDTO(player));
         return dto;
     }
 
@@ -106,19 +124,7 @@ public class SalvoController {
                 .map(salvo -> makeSalvoDTO(salvo))
                 .collect(toList());
     }
-/*
-    private List<Map<String, Object>> getSalvoList2(Game game){
-        Set<GamePlayer> games = game.getGamePlayers();
-        Set<Salvo> s = new HashSet<Salvo>();
-        for(GamePlayer g: games){
-           for(Salvo sal: g.getSalvoes()){
-               s.add(sal);
-           }
-        }
-        return makeSalvoList(s);
 
-    }
-*/
     private List<Map<String,Object>> getSalvoList(Game game){
         List<Map<String,Object>> myList = new ArrayList<>();
         //Array de json se crea una lista
@@ -126,31 +132,44 @@ public class SalvoController {
         return myList;
     }
 
-
-    private List<Map<String, Object>> getScoreList(Set<Score> scores){
-        return scores
-                .stream()
-                .map(score -> makeScoreDTO(score))
-                .collect(toList());
-    }
-
     //1) Método -> Crear lista de distintos players
-    private List<Map<String,Object>> gePlayerList(){
+    private List<Object> getPlayerList(){
+
         return playerRepository
                 .findAll()
                 .stream()
                 .map(player -> makePlayerDTO(player)).collect(toList());
+
+
     }
 
-    private Map<String, Object> makeScoreDTO(Score score) {
+    //1) Método -> Crear lista de distintos players
+    private List<Map<String,Object>> getScoreList(Set<Score> scores){
+        return scores
+                .stream()
+                .map(score -> ScoreDTO(score)).collect(toList());
+
+    }
+
+
+    public Map<String, Object> ScoreDTO(Score score){
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("id", score.getId());
+        dto.put("name", score.getPlayer().getEmail());
+        dto.put("score", score.getScore());
         //dto.put("player", makePlayerDTO(score.getPlayer()));
         dto.put("finishDate", score.getFinishDate());
-        dto.put("totalScore", score.getScore());
-        dto.put("wins", score.getScore());
-        dto.put("losses", score.getScore());
-        dto.put("ties", score.getScore());
+       // dto.put("score", makeScoreDTO(score.getPlayer()));
+        return dto;
+    }
+
+
+    public Map<String, Object> makeScoreDTO(Player player){
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("name", player.getEmail());
+        dto.put("total", player.getScore());
+        dto.put("won", player.getWins(player.getScores()));
+        dto.put("lost", player.getLosses(player.getScores()));
+        dto.put("tied", player.getTies(player.getScores()));
         return dto;
     }
 

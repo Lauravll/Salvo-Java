@@ -76,7 +76,6 @@ public class SalvoApplication {
 			shipLocations4.add("I1");
 			shipLocations4.add("J1");
 
-
 			Ship ship = new Ship("Patrol Boat", gamePlayer2, shipLocations1);
 			Ship ship2 = new Ship("Submarine", gamePlayer, shipLocations2);
 			Ship ship3 = new Ship("Destroyer", gamePlayer2, shipLocations3);
@@ -119,8 +118,8 @@ public class SalvoApplication {
 			Date dates = new Date();
 			float f = (float) 0.5;
 			Score score = new Score(f, dates, player1, game );
-			Score score2 = new Score((float)30, dates, player2, game);
-			Score score3 = new Score(12, dates, player1, game);
+			Score score2 = new Score((float)1, dates, player2, game);
+			Score score3 = new Score(0, dates, player1, game);
 
 			scoreRepository.save(score);
 			scoreRepository.save(score2);
@@ -129,9 +128,6 @@ public class SalvoApplication {
 			player1.addScore(score);
 			player2.addScore(score2);
 			player1.addScore(score3);
-
-
-
 
 		};
 
