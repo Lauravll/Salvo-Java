@@ -25,7 +25,7 @@ public class Game {
     // tell JPA to use whatever ID generator is provided by the database system
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-    private Long id;
+    private long id;
     private Date creationDate;
 
     @OneToMany(mappedBy="game", fetch= FetchType.EAGER)
@@ -41,11 +41,11 @@ public class Game {
     public Game(){
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 

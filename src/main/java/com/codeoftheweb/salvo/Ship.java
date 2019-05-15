@@ -17,7 +17,7 @@ public class Ship {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-    private Long id;
+    private long id;
     private String type;
 
     @ManyToOne( fetch = FetchType.EAGER)
@@ -25,6 +25,7 @@ public class Ship {
     private GamePlayer gameplayer;
 
     @ElementCollection
+    //Estoy agregando una columna, es mejor el mismo nombre para luego no estar diferenciando.
     @Column(name="locations")
     private List<String> locations = new ArrayList<>();
 
@@ -36,11 +37,11 @@ public class Ship {
         this.locations = locations;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 

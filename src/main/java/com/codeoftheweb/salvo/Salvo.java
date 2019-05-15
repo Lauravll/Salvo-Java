@@ -14,7 +14,7 @@ public class Salvo {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-    private Long id;
+    private long id;
     private int turn;
 
     @ManyToOne( fetch = FetchType.EAGER)
@@ -35,7 +35,7 @@ public class Salvo {
         this.locations = locations;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
@@ -52,7 +52,7 @@ public class Salvo {
         return locations;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 

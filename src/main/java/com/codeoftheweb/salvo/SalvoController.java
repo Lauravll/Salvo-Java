@@ -1,9 +1,10 @@
 package com.codeoftheweb.salvo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -22,18 +23,16 @@ public class SalvoController {
     @Autowired
     private GamePlayerRepository gamePlayerRepository;
     @Autowired
-    private SalvoRepository salvoRepository;
-    @Autowired
-    private ScoreRepository scoreRepository;
-    @Autowired
     private PlayerRepository playerRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @RequestMapping("/games")
     public List<Object> getGames2() {
-        return gameRepository
+        return gamePlayerRepository
                 .findAll()
                 .stream()
-                .map(game -> makeGameDTO(game)).collect(toList());
+                .map(game -> gameViewDTO(game)).collect(toList());
     }
 
     @RequestMapping("/game_view")
@@ -56,45 +55,34 @@ public class SalvoController {
         return getPlayerList();
     }
 
-    //Un objeto de transferencia de datos (DTO) es una estructura de Java creada solo para organizar los datos para transferirlos a otro sistema. Se crea según sea necesario, sin información irrelevante o privada, y sin referencias circulares.
-    private Map<String, Object> makeGameDTO(Game game) {
-        Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("id", game.getId());
-        dto.put("creationDate", game.getCreationDate().getTime());
-       dto.put("gamePlayers", getGamePlayerList(game.getGamePlayers())); //playerlit
-
-
-        //dto.put("ships", gamePlayer.getShips());
-        //dto.put("salvoes", getSalvoList(gamePlayer.getGame()));
-        dto.put("score", getScoreList(game.getScores()));
-        return dto;
-    }
-
+    ///game_view/{id}
     private Map<String, Object> gameViewDTO(GamePlayer gamePlayer) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", gamePlayer.getId());
         dto.put("creationDate", gamePlayer.getDate().getTime());
+        //Usa makeGamePlayerDTO
         dto.put("gamePlayers", getGamePlayerList(gamePlayer.getGame().getGamePlayers()));
         dto.put("ships", gamePlayer.getShips());
         dto.put("salvoes", getSalvoList(gamePlayer.getGame()));
         return dto;
     }
 
+    //Usado por gameViewDTO
     private Map<String, Object> makeGamePlayerDTO(GamePlayer gamePlayer) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", gamePlayer.getId());
         dto.put("player", makePlayerDTO(gamePlayer.getPlayer()));
         return dto;
     }
-/*
-    private Map<String, Object> makeLeaderBoardDTO(Player player) {
-        Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("id", player.getId());
-        dto.put("email", player.getEmail());
-        dto.put("score", makeScoreDTO(player));
-        return dto;
+
+    //1) Método -> Crear lista de distintos players
+    private List<Object> getPlayerList(){
+        return playerRepository
+                .findAll()
+                .stream()
+                .map(player -> makePlayerDTO(player)).collect(toList());
     }
-*/
+
     private Map<String, Object> makeSalvoDTO(Salvo salvo) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("turn", salvo.getId());
@@ -107,6 +95,7 @@ public class SalvoController {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", player.getId());
         dto.put("email", player.getEmail());
+        dto.put("password", player.getPassword());
         dto.put("score", makeScoreDTO(player));
         return dto;
     }
@@ -133,17 +122,6 @@ public class SalvoController {
     }
 
     //1) Método -> Crear lista de distintos players
-    private List<Object> getPlayerList(){
-
-        return playerRepository
-                .findAll()
-                .stream()
-                .map(player -> makePlayerDTO(player)).collect(toList());
-
-
-    }
-
-    //1) Método -> Crear lista de distintos players
     private List<Map<String,Object>> getScoreList(Set<Score> scores){
         return scores
                 .stream()
@@ -151,17 +129,13 @@ public class SalvoController {
 
     }
 
-
     public Map<String, Object> ScoreDTO(Score score){
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("name", score.getPlayer().getEmail());
         dto.put("score", score.getScore());
-        //dto.put("player", makePlayerDTO(score.getPlayer()));
         dto.put("finishDate", score.getFinishDate());
-       // dto.put("score", makeScoreDTO(score.getPlayer()));
         return dto;
     }
-
 
     public Map<String, Object> makeScoreDTO(Player player){
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
@@ -171,6 +145,24 @@ public class SalvoController {
         dto.put("lost", player.getLosses(player.getScores()));
         dto.put("tied", player.getTies(player.getScores()));
         return dto;
+    }
+
+    @RequestMapping(path = "/players", method = RequestMethod.POST)
+    public ResponseEntity<Object> register(
+            @RequestParam String email, @RequestParam String password) {
+
+        if (email.isEmpty() || password.isEmpty()) {
+            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        }
+
+        if (playerRepository.findByEmail(email) !=  null) {
+            return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
+        }
+
+        playerRepository.save(new Player(email, passwordEncoder.encode(password)));
+        return new ResponseEntity<>(HttpStatus.CREATED);
+
+
     }
 
 }
