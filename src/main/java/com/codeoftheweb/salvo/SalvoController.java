@@ -3,6 +3,9 @@ package com.codeoftheweb.salvo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +29,7 @@ public class SalvoController {
     private PlayerRepository playerRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
+/*
 
     @RequestMapping("/games")
     public List<Object> getGames2() {
@@ -34,16 +38,41 @@ public class SalvoController {
                 .stream()
                 .map(game -> gameViewDTO(game)).collect(toList());
     }
+*/
+    @RequestMapping("/games")
+    public Map<String, Object> getGames2(Authentication authentication) {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        //ontiene información sobre el contexto de seguridad actual de la aplicación, que contiene información detallada acerca del usuario que está trabajando actualmente con la aplicación
+        //tiliza ThreadLocal para almacenar esta información, que significa que el contexto de seguridad
+        // Authentication - desde punto de vista Spring Security es un usuario (Principal)
+        authentication = SecurityContextHolder.getContext().getAuthentication();
+        Player authenticationPlayer = getAuthentication(authentication);
+
+        if (authenticationPlayer == null)
+            dto.put("player", "Guest");
+        else
+            dto.put("player", makePlayerDTO(authenticationPlayer));
+            dto.put("games" , getGames());
+        return dto;
+    }
 
     @RequestMapping("/game_view")
-    public List<Object> getGames() {
+    public List<Object> getGameView() {
         return gamePlayerRepository
                 .findAll()
                 .stream()
                 .map(game -> makeGamePlayerDTO(game)).collect(toList());
     }
 
-    @RequestMapping("/game_view/{id}")
+
+    public List<Object> getGames() {
+        return gamePlayerRepository
+                .findAll()
+                .stream()
+                .map(game -> gameViewDTO(game)).collect(toList());
+    }
+
+    @RequestMapping("/game_view/{id}") //dice que devo llamar a game_view cuando recibo get para url
     private Map<String, Object> getGames(@PathVariable Long id) {
         return  gameViewDTO(gamePlayerRepository.findById(id).get());
     }
@@ -149,20 +178,31 @@ public class SalvoController {
 
     @RequestMapping(path = "/players", method = RequestMethod.POST)
     public ResponseEntity<Object> register(
-            @RequestParam String email, @RequestParam String password) {
+            @RequestParam String username, @RequestParam String password) {
 
-        if (email.isEmpty() || password.isEmpty()) {
+        System.out.println(username);
+        System.out.println(password);
+        if (username.isEmpty() || password.isEmpty()) {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
 
-        if (playerRepository.findByEmail(email) !=  null) {
+        if (playerRepository.findByEmail(username) !=  null) {
             return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
+            //System.out.println("Usuario ya existente");
         }
 
-        playerRepository.save(new Player(email, passwordEncoder.encode(password)));
+        playerRepository.save(new Player(username, passwordEncoder.encode(password)));
         return new ResponseEntity<>(HttpStatus.CREATED);
 
 
-    }
+   }
 
+    private Player getAuthentication(Authentication authentication) {
+        if(authentication == null || authentication instanceof AnonymousAuthenticationToken){
+            return null;
+        }
+        else{
+            return (playerRepository.findByEmail(authentication.getName()));
+        }
+    }
 }

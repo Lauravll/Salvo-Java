@@ -180,8 +180,8 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 			Player player = playerRepository.findByEmail(inputName);
 			System.out.println(player);
 			if (player != null) {
-				return new User(player.getEmail(), player.getPassword(),
-						AuthorityUtils.createAuthorityList("USER"));
+				return new User(player.getEmail(), player.getPassword(), //User : clase predefinida de Spring
+						AuthorityUtils.createAuthorityList("USER")); //Le da un rol
 			} else {
 				throw new UsernameNotFoundException("Unknown user: " + inputName);
 			}
@@ -198,8 +198,14 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 				//.antMatchers("/api/games").permitAll()
 
-				.antMatchers("/admin/**").hasAuthority("ADMIN")
-				.antMatchers("/**").hasAuthority("USER");
+				.antMatchers( "/web/games_3.html").permitAll()
+				.antMatchers( "/web/**").permitAll()
+				.antMatchers( "/api/games.").permitAll()
+				.antMatchers( "/api/players").permitAll()
+				.antMatchers( "/api/game_view/*").hasAuthority("user")
+				.antMatchers( "/rest/*").denyAll()
+				.anyRequest().permitAll();
+
 
 		http.formLogin()
 				.usernameParameter("username")
