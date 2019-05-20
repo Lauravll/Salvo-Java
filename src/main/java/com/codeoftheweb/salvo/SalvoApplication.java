@@ -56,8 +56,8 @@ public class SalvoApplication {
 		return (args) -> {
 
 			Player player1 = new Player("j.bauer@ctu.gov", passwordEncoder.encode("123"));
-			Player player2 = new Player ("c.obrian@ctu.gov", "p2");
-			Player player3 = new Player ("c.oconan@ctu.gov", "p3");
+			Player player2 = new Player ("c.obrian@ctu.gov", passwordEncoder.encode("123"));
+			Player player3 = new Player ("usuario3@ctu.gov", passwordEncoder.encode("123"));
 			playerRepository.save(player1);
 			playerRepository.save(player2);
 			playerRepository.save(player3);
@@ -78,11 +78,13 @@ public class SalvoApplication {
 			GamePlayer gamePlayer2 = new GamePlayer(player2, game, date);
 			GamePlayer gamePlayer3 = new GamePlayer(player3, game2, date);
 			GamePlayer gamePlayer4 = new GamePlayer(player2, game2, newDate);
+			GamePlayer gamePlayer5 = new GamePlayer(player2, game3, date);
 
 			gamePlayerRepository.save(gamePlayer);
 			gamePlayerRepository.save(gamePlayer2);
 			gamePlayerRepository.save(gamePlayer3);
 			gamePlayerRepository.save(gamePlayer4);
+			gamePlayerRepository.save(gamePlayer5);
 
 			List<String> shipLocations1 = new ArrayList<>();
 			shipLocations1.add("H4");
@@ -117,8 +119,8 @@ public class SalvoApplication {
 			//agrego barco
 			gamePlayer.addShip(ship3);
 			gamePlayer2.addShip(ship2);
-			gamePlayer3.addShip(ship);
-			gamePlayer4.addShip(ship4);
+			//gamePlayer3.addShip(ship);
+			//gamePlayer4.addShip(ship4);
 
 
 			List<String> salvoLocations = new ArrayList<>();
@@ -135,16 +137,15 @@ public class SalvoApplication {
 			Salvo salvo3 = new Salvo(2, gamePlayer, salvoLocations3 );
 
 			//Juego 2
-			Salvo salvo4 = new Salvo(2, gamePlayer3, salvoLocations2 );
+			//Salvo salvo4 = new Salvo(2, gamePlayer3, salvoLocations2 );
 
 			salvoRepository.save(salvo);
 			salvoRepository.save(salvo2);
 			salvoRepository.save(salvo3);
-			salvoRepository.save(salvo4);
+			//salvoRepository.save(salvo4);
 
 			Date dates = new Date();
-			float f = (float) 0.5;
-			Score score = new Score(f, dates, player1, game );
+			Score score = new Score( (float) 0.5, dates, player1, game );
 			Score score2 = new Score((float)1, dates, player2, game);
 			Score score3 = new Score(0, dates, player1, game);
 
@@ -157,7 +158,7 @@ public class SalvoApplication {
 			player1.addScore(score3);
 
 
-			System.out.println(playerRepository.findByEmail("c.obrian@ctu.gov"));
+			//System.out.println(playerRepository.findByEmail("c.obrian@ctu.gov"));
 
 		};
 
@@ -178,7 +179,7 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 	public void init(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(inputName-> {
 			Player player = playerRepository.findByEmail(inputName);
-			System.out.println(player);
+			//System.out.println(player);
 			if (player != null) {
 				return new User(player.getEmail(), player.getPassword(), //User : clase predefinida de Spring
 						AuthorityUtils.createAuthorityList("USER")); //Le da un rol
@@ -202,7 +203,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers( "/web/**").permitAll()
 				.antMatchers( "/api/games.").permitAll()
 				.antMatchers( "/api/players").permitAll()
-				.antMatchers( "/api/game_view/*").hasAuthority("user")
+				.antMatchers( "/api/game_view/*").hasAuthority("USER")
 				.antMatchers( "/rest/*").denyAll()
 				.anyRequest().permitAll();
 

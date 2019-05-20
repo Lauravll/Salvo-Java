@@ -30,7 +30,6 @@ public class SalvoController {
     @Autowired
     PasswordEncoder passwordEncoder;
 /*
-
     @RequestMapping("/games")
     public List<Object> getGames2() {
         return gamePlayerRepository
@@ -42,19 +41,34 @@ public class SalvoController {
     @RequestMapping("/games")
     public Map<String, Object> getGames2(Authentication authentication) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        //ontiene información sobre el contexto de seguridad actual de la aplicación, que contiene información detallada acerca del usuario que está trabajando actualmente con la aplicación
-        //tiliza ThreadLocal para almacenar esta información, que significa que el contexto de seguridad
-        // Authentication - desde punto de vista Spring Security es un usuario (Principal)
         authentication = SecurityContextHolder.getContext().getAuthentication();
         Player authenticationPlayer = getAuthentication(authentication);
-
         if (authenticationPlayer == null)
             dto.put("player", "Guest");
         else
             dto.put("player", makePlayerDTO(authenticationPlayer));
-            dto.put("games" , getGames());
+        dto.put("games" , getGames());
         return dto;
     }
+
+
+    @RequestMapping(path = "/games", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> createJuego(Authentication authentication) {
+        authentication = SecurityContextHolder.getContext().getAuthentication();
+        Player authenticatedPlayer = getAuthentication(authentication);
+        if(authenticatedPlayer == null){
+            return new ResponseEntity<>(makeMap("error","No estas autorizado"), HttpStatus.FORBIDDEN);
+        } else {
+            Date date = Date.from(java.time.ZonedDateTime.now().toInstant());
+            Game auxGame = new Game(date);
+            gameRepository.save(auxGame);
+
+            GamePlayer auxGameP = new GamePlayer(authenticatedPlayer,auxGame,date);
+            gamePlayerRepository.save(auxGameP);
+            return new ResponseEntity<>(makeMap("gpid", auxGameP.getId()), HttpStatus.CREATED);
+        }
+    }
+
 
     @RequestMapping("/game_view")
     public List<Object> getGameView() {
@@ -64,23 +78,81 @@ public class SalvoController {
                 .map(game -> makeGamePlayerDTO(game)).collect(toList());
     }
 
-
-    public List<Object> getGames() {
+    public List<Object> getGamesA() {
         return gamePlayerRepository
                 .findAll()
                 .stream()
                 .map(game -> gameViewDTO(game)).collect(toList());
     }
 
-    @RequestMapping("/game_view/{id}") //dice que devo llamar a game_view cuando recibo get para url
-    private Map<String, Object> getGames(@PathVariable Long id) {
-        return  gameViewDTO(gamePlayerRepository.findById(id).get());
+    public List<Object> getGames() {
+        return gameRepository
+                .findAll()
+                .stream()
+                .map(game ->makeGameDTO(game)).collect(toList());
+    }
+
+    @RequestMapping("/game_view/{id}")
+    public ResponseEntity<Map<String, Object>> getGames(@PathVariable Long id, Authentication authentication) {
+        authentication = SecurityContextHolder.getContext().getAuthentication();
+        GamePlayer gamePlayer = gamePlayerRepository.findById(id).get();
+        Player player = gamePlayer.getPlayer();
+        System.out.println(player);
+        //System.out.println();
+        Player authenticationPlayer = getAuthentication(authentication);
+        //System.out.println(authenticationPlayer);
+        if(authenticationPlayer == player){
+
+            return new ResponseEntity<>(gameViewDTO(gamePlayerRepository.findById(id).get()), HttpStatus.ACCEPTED);}
+        else{
+            return new ResponseEntity<>(makeMap("error", "Usuario no autorizado"), HttpStatus.UNAUTHORIZED);
+        }
+
+    }
+
+    @RequestMapping("/game/{id}/players")
+    public ResponseEntity<Map<String, Object>> getGamesWhithPlayers(@PathVariable Long id, Authentication actualUser) {
+        //System.out.println(id);
+        actualUser = SecurityContextHolder.getContext().getAuthentication();
+        Player authenticationPlayer = getAuthentication(actualUser);
+        Game game = gameRepository.findById(id).get();
+        //System.out.println("id juego"+game.getId());
+        if(authenticationPlayer == null){
+            return new ResponseEntity<>(makeMap("error", "Usuario no autorizado"), HttpStatus.UNAUTHORIZED);
+        }
+        else{
+            //System.out.println("Usuario autorizado");
+            if (game == null){
+                return new ResponseEntity<>(makeMap("error", "Juego no encontrado"), HttpStatus.FORBIDDEN);
+            }
+            else{
+                //System.out.println("GamePlayer existe");
+                List<Player> list = game.getPlayers();
+                if (list.size() > 2){
+                    return new ResponseEntity<>(makeMap("error", "El juego ya tiene dos jugadores"), HttpStatus.FORBIDDEN);
+                }
+                else{
+                    //System.out.println("Hay espacio disponible");
+
+                    GamePlayer nuevog1 = new GamePlayer(authenticationPlayer, game, new Date());
+                    gamePlayerRepository.save(nuevog1);
+                    return new ResponseEntity<>(makeMap("gpid", nuevog1.getId()), HttpStatus.CREATED);
+                    }
+            }
+        }
+
+
+    }
+
+    private Map<String, Object> makeMap(String key, Object value) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(key, value);
+        return map;
     }
 
     //players
     @RequestMapping("/leaderBoard")
     public List<Object> getScores() {
-
         return getPlayerList();
     }
 
@@ -89,18 +161,31 @@ public class SalvoController {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", gamePlayer.getId());
         dto.put("creationDate", gamePlayer.getDate().getTime());
-        //Usa makeGamePlayerDTO
+        dto.put("scores", getScoreList(gamePlayer.getGame().getScores()));
         dto.put("gamePlayers", getGamePlayerList(gamePlayer.getGame().getGamePlayers()));
         dto.put("ships", gamePlayer.getShips());
         dto.put("salvoes", getSalvoList(gamePlayer.getGame()));
         return dto;
     }
 
+    private Map<String, Object> makeGameDTO(Game game) {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("id", game.getId());
+        dto.put("creationDate", game.getCreationDate().getTime());
+        dto.put("scores", getScoreList(game.getScores())); //llama al score del game
+        dto.put("gamePlayers", getGamePlayerList(game.getGamePlayers()));
+        dto.put("salvoes", getSalvoList(game));
+        return dto;
+    }
+
+
+
     //Usado por gameViewDTO
     private Map<String, Object> makeGamePlayerDTO(GamePlayer gamePlayer) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", gamePlayer.getId());
-        dto.put("player", makePlayerDTO(gamePlayer.getPlayer()));
+        dto.put("player", makePlayerDTO2(gamePlayer.getPlayer(),gamePlayer.getId() ));
+        dto.put("ships", MakeShipList(gamePlayer.getShips()));
         return dto;
     }
 
@@ -123,9 +208,19 @@ public class SalvoController {
     private Map<String, Object> makePlayerDTO(Player player) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", player.getId());
+        dto.put("name", player.getEmail());
+        //dto.put("password", player.getPassword());
+       // dto.put("score", makeScoreDTO(player));
+        return dto;
+    }
+
+    private Map<String, Object> makePlayerDTO2(Player player, long gpid) {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        //dto.put("gpid", gpid);
+        dto.put("id", player.getId());
         dto.put("email", player.getEmail());
-        dto.put("password", player.getPassword());
-        dto.put("score", makeScoreDTO(player));
+        //dto.put("password", player.getPassword());
+        // dto.put("score", makeScoreDTO(player));
         return dto;
     }
 
@@ -150,7 +245,6 @@ public class SalvoController {
         return myList;
     }
 
-    //1) Método -> Crear lista de distintos players
     private List<Map<String,Object>> getScoreList(Set<Score> scores){
         return scores
                 .stream()
@@ -160,9 +254,11 @@ public class SalvoController {
 
     public Map<String, Object> ScoreDTO(Score score){
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("playerID", score.getPlayer().getId());
         dto.put("name", score.getPlayer().getEmail());
+        //System.out.println(score.getScore());
         dto.put("score", score.getScore());
-        dto.put("finishDate", score.getFinishDate());
+        dto.put("finishedDate", score.getFinishDate());
         return dto;
     }
 
@@ -180,20 +276,16 @@ public class SalvoController {
     public ResponseEntity<Object> register(
             @RequestParam String username, @RequestParam String password) {
 
-        System.out.println(username);
-        System.out.println(password);
         if (username.isEmpty() || password.isEmpty()) {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
 
         if (playerRepository.findByEmail(username) !=  null) {
             return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
-            //System.out.println("Usuario ya existente");
         }
 
         playerRepository.save(new Player(username, passwordEncoder.encode(password)));
         return new ResponseEntity<>(HttpStatus.CREATED);
-
 
    }
 
@@ -205,4 +297,29 @@ public class SalvoController {
             return (playerRepository.findByEmail(authentication.getName()));
         }
     }
+
+    private List<Map<String, Object>> MakeShipList(Set<Ship> ships){
+        return ships
+                .stream()
+                .map(ship -> makeShipDTO(ship))
+                .collect(toList());
+    }
+
+    private Map<String, Object> makeShipDTO(Ship ship) {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("type", ship.getType());
+        dto.put("locations", ship.getLocations());
+        return dto;
+    }
+
+    @RequestMapping("/")
+    public List<Object> getPlayers() {
+        return playerRepository
+                .findAll()
+                .stream()
+                .map(player -> makePlayerDTO(player))
+                .collect(toList());
+    }
+
+
 }

@@ -22,8 +22,7 @@ public class Salvo {
     private GamePlayer gameplayer;
 
     @ElementCollection
-    @CollectionTable(name="salvoLocation")
-    @Column(name="shipLocation_id")
+    @Column(name="locations")
     private List<String> locations = new ArrayList<>();
 
     public Salvo() {
