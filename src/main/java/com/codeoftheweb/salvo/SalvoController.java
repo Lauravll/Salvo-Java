@@ -29,6 +29,10 @@ public class SalvoController {
     private PlayerRepository playerRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    private ShipRepository shipRepository;
+    @Autowired
+    private SalvoRepository salvoRepository;
 /*
     @RequestMapping("/games")
     public List<Object> getGames2() {
@@ -110,7 +114,7 @@ public class SalvoController {
 
     }
 
-    @RequestMapping("/game/{id}/players")
+    @RequestMapping(path="/game/{id}/players" , method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> getGamesWhithPlayers(@PathVariable Long id, Authentication actualUser) {
         //System.out.println(id);
         actualUser = SecurityContextHolder.getContext().getAuthentication();
@@ -128,21 +132,73 @@ public class SalvoController {
             else{
                 //System.out.println("GamePlayer existe");
                 List<Player> list = game.getPlayers();
-                if (list.size() > 2){
+                if (list.size() >= 2){
                     return new ResponseEntity<>(makeMap("error", "El juego ya tiene dos jugadores"), HttpStatus.FORBIDDEN);
                 }
                 else{
                     //System.out.println("Hay espacio disponible");
-
                     GamePlayer nuevog1 = new GamePlayer(authenticationPlayer, game, new Date());
                     gamePlayerRepository.save(nuevog1);
                     return new ResponseEntity<>(makeMap("gpid", nuevog1.getId()), HttpStatus.CREATED);
                     }
             }
         }
-
-
     }
+
+    @RequestMapping(value = "/games/players/{id}/ships", method = RequestMethod.POST)
+    private ResponseEntity<Map<String,Object>> AddShips(@PathVariable long id,
+                                                        @RequestBody Set<Ship> ships,
+                                                        Authentication authentication) {
+        GamePlayer gamePlayer = gamePlayerRepository.findById(id).orElse(null);
+        Player loggedPlayer = getAuthentication(authentication);
+        if (loggedPlayer == null)
+            return new ResponseEntity<>(makeMap("error", "no player logged in"), HttpStatus.UNAUTHORIZED);
+        if (gamePlayer == null)
+            return new ResponseEntity<>(makeMap("error", "no such gamePlayer"), HttpStatus.UNAUTHORIZED);
+        if (WrongGamePlayer(id, gamePlayer, loggedPlayer)) {
+            return new ResponseEntity<>(makeMap("error", "Wrong GamePlayer"), HttpStatus.UNAUTHORIZED);
+        } else {
+            if (gamePlayer.getSalvoes().isEmpty()) {
+                ships.forEach(ship -> ship.setGameplayer(gamePlayer));
+                gamePlayer.setShips(ships);
+                shipRepository.saveAll(ships);
+                return new ResponseEntity<>(makeMap("ok", "Ships saved"), HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>(makeMap("error", "Player already has ships"), HttpStatus.FORBIDDEN);
+            }
+        }
+    }
+
+    @RequestMapping(value = "/games/players/{id}/salvos", method = RequestMethod.POST)
+    private ResponseEntity<Map<String,Object>> AddSalvos(@PathVariable long id,
+                                                         @RequestBody Salvo salvo,
+                                                        Authentication authentication) {
+        GamePlayer gamePlayer = gamePlayerRepository.findById(id).orElse(null);
+        Player loggedPlayer = getAuthentication(authentication);
+        if (loggedPlayer == null)
+            return new ResponseEntity<>(makeMap("error", "no player logged in"), HttpStatus.UNAUTHORIZED);
+        if (gamePlayer == null)
+            return new ResponseEntity<>(makeMap("error", "no such gamePlayer"), HttpStatus.UNAUTHORIZED);
+        if (WrongGamePlayer(id, gamePlayer, loggedPlayer)) {
+            return new ResponseEntity<>(makeMap("error", "Wrong GamePlayer"), HttpStatus.UNAUTHORIZED);
+        } else {
+            if (gamePlayer.getSalvoes().isEmpty()) {
+                gamePlayer.addSalvo(salvo);
+                salvoRepository.save(salvo);
+                return new ResponseEntity<>(makeMap("ok", "Ships saved"), HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>(makeMap("error", "Player already has ships"), HttpStatus.FORBIDDEN);
+            }
+        }
+    }
+
+    private boolean WrongGamePlayer(long id, GamePlayer gamePlayer, Player player){
+
+        boolean corretGP= gamePlayer.getPlayer().getId() != player.getId();
+        return corretGP;
+    }
+
+
 
     private Map<String, Object> makeMap(String key, Object value) {
         Map<String, Object> map = new HashMap<>();
@@ -249,14 +305,12 @@ public class SalvoController {
         return scores
                 .stream()
                 .map(score -> ScoreDTO(score)).collect(toList());
-
     }
 
     public Map<String, Object> ScoreDTO(Score score){
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("playerID", score.getPlayer().getId());
         dto.put("name", score.getPlayer().getEmail());
-        //System.out.println(score.getScore());
         dto.put("score", score.getScore());
         dto.put("finishedDate", score.getFinishDate());
         return dto;
@@ -275,15 +329,12 @@ public class SalvoController {
     @RequestMapping(path = "/players", method = RequestMethod.POST)
     public ResponseEntity<Object> register(
             @RequestParam String username, @RequestParam String password) {
-
         if (username.isEmpty() || password.isEmpty()) {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
-
         if (playerRepository.findByEmail(username) !=  null) {
             return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
         }
-
         playerRepository.save(new Player(username, passwordEncoder.encode(password)));
         return new ResponseEntity<>(HttpStatus.CREATED);
 
@@ -320,6 +371,5 @@ public class SalvoController {
                 .map(player -> makePlayerDTO(player))
                 .collect(toList());
     }
-
 
 }
