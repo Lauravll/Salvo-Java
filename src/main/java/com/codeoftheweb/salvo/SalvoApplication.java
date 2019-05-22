@@ -134,7 +134,7 @@ public class SalvoApplication {
 			//Juego 1
 			Salvo salvo = new Salvo(1, gamePlayer2, salvoLocations );
 			Salvo salvo2 = new Salvo(2, gamePlayer, salvoLocations2 );
-			Salvo salvo3 = new Salvo(2, gamePlayer, salvoLocations3 );
+			Salvo salvo3 = new Salvo(3, gamePlayer2, salvoLocations3 );
 
 			//Juego 2
 			//Salvo salvo4 = new Salvo(2, gamePlayer3, salvoLocations2 );
@@ -142,7 +142,6 @@ public class SalvoApplication {
 			salvoRepository.save(salvo);
 			salvoRepository.save(salvo2);
 			salvoRepository.save(salvo3);
-			//salvoRepository.save(salvo4);
 
 			Date dates = new Date();
 			Score score = new Score( (float) 0.5, dates, player1, game );
@@ -156,6 +155,8 @@ public class SalvoApplication {
 			player1.addScore(score);
 			player2.addScore(score2);
 			player1.addScore(score3);
+
+
 
 
 			//System.out.println(playerRepository.findByEmail("c.obrian@ctu.gov"));

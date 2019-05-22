@@ -34,6 +34,12 @@ public class Salvo {
         this.locations = locations;
     }
 
+    public Salvo(int turn, List<String> locations) {
+        this.turn = turn;
+        this.gameplayer = gameplayer;
+        this.locations = locations;
+    }
+
     public long getId() {
         return id;
     }
@@ -65,5 +71,15 @@ public class Salvo {
 
     public void setLocations(List<String> locations) {
         this.locations = locations;
+    }
+
+    @Override
+    public String toString() {
+        return "Salvo{" +
+                "id=" + id +
+                ", turn=" + turn +
+
+                ", locations=" + locations +
+                '}';
     }
 }

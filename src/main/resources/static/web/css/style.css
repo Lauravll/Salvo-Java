@@ -1,5 +1,6 @@
 body {
-    background: url(../img/back2.jpg);
+    background: url(../img/back2.jfif);
+
     font-family: 'Dosis', sans-serif;
 }
 
@@ -51,7 +52,7 @@ body {
 
 .shipPoslabel {
     font-weight: 200;
-    color: #ffc107;
+    color: #8D82DD;
 }
 
 .bannerImage {
@@ -247,7 +248,7 @@ body {
 .gameStateLabelBig {
     font-size: 1.3em;
     font-weight: 600;
-    color: #ffc107;
+    color: #8D82DD;
 }
 
 .gameStateLabel {
@@ -367,11 +368,11 @@ button:focus {
 
 .yellow500 {
     font-weight: 600;
-    color: #ffc107;
+    color: #8D82DD;
 }
 
 #scoreBoard > tbody > tr:first-child > td {
-    color: #ffc107;
+    color: #8D82DD;
 }
 
 #createGame {

@@ -166,7 +166,7 @@ function updateView() {
             $('#login-form').show("slow");
 
         } else {
-            $('#currentPlayer').text(data.player.name);
+            $('#currentPlayer').text(data.player.email);
             $('#login-form').hide("slow");
             $('#logout-form').show("slow");
 
@@ -212,7 +212,7 @@ function showGamesTable(gamesData) {
 
             if (isLoggedPlayer === true) {
                 let gameUrl = "/web/game.html?gp=" + gpid;
-                $('<td class="textCenter"><a href=' + '"' + gameUrl + '"' + 'class="btn btn-warning" role="button">ENTER GAME</a></td>').appendTo(row);
+                $('<td class="textCenter"><a href=' + '"' + gameUrl + '"' + 'class="btn btn-nice" role="button">ENTER GAME</a></td>').appendTo(row);
             } else if (joinButtonHtml !== null){
                 $(joinButtonHtml).appendTo(row);
             } else {

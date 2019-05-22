@@ -97,12 +97,18 @@ public class GamePlayer {
     }
 
     public void addSalvo(Salvo salvo) {
-        System.out.println(salvo.getGameplayer().getPlayer());
-
         salvo.setGameplayer(this);
         System.out.println(salvo.getGameplayer().getPlayer());
         salvoes.add(salvo);
     }
 
-
+    @Override
+    public String toString() {
+        return "GamePlayer{" +
+                "id=" + id +
+                ", date=" + date +
+                ", player=" + player +
+                ", game=" + game +
+                '}';
+    }
 }
