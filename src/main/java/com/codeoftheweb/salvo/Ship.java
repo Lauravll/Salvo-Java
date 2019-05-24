@@ -69,4 +69,14 @@ public class Ship {
     public void setLocations(List<String> locations) {
         this.locations = locations;
     }
+
+    @Override
+    public String toString() {
+        return "Ship{" +
+                "id=" + id +
+                ", type='" + type + '\'' +
+                ", gameplayer=" + gameplayer +
+                ", locations=" + locations +
+                '}';
+    }
 }

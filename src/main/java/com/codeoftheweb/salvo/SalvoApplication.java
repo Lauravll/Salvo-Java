@@ -86,62 +86,101 @@ public class SalvoApplication {
 			gamePlayerRepository.save(gamePlayer4);
 			gamePlayerRepository.save(gamePlayer5);
 
-			List<String> shipLocations1 = new ArrayList<>();
-			shipLocations1.add("H4");
-			shipLocations1.add("H3");
+			List<String> patrolBoatLocations = new ArrayList<>();
+			patrolBoatLocations.add("A1");
+			patrolBoatLocations.add("B1");
 
-			List<String> shipLocations2 = new ArrayList<>();
-			shipLocations2.add("A2");
-			shipLocations2.add("B2");
-			shipLocations2.add("C2");
-			shipLocations2.add("D2");
+			List<String> destroyerLocations = new ArrayList<>();
+			destroyerLocations.add("G2");
+			destroyerLocations.add("G3");
+			destroyerLocations.add("G1");
 
-			List<String> shipLocations3 = new ArrayList<>();
-			shipLocations3.add("A1");
-			shipLocations3.add("B1");
+			List<String> submarineLocations = new ArrayList<>();
+			submarineLocations.add("E10");
+			submarineLocations.add("F10");
+			submarineLocations.add("G10");
 
-			List<String> shipLocations4 = new ArrayList<>();
-			shipLocations4.add("H");
-			shipLocations4.add("I1");
-			shipLocations4.add("J1");
+			List<String> battleshipLocations = new ArrayList<>();
+			battleshipLocations.add("A10");
+			battleshipLocations.add("B10");
+			battleshipLocations.add("C10");
+			battleshipLocations.add("D10");
 
-			Ship ship = new Ship("Patrol Boat", gamePlayer2, shipLocations1);
-			Ship ship2 = new Ship("Submarine", gamePlayer, shipLocations2);
-			Ship ship3 = new Ship("Destroyer", gamePlayer2, shipLocations3);
-			Ship ship4 = new Ship("Carrier", gamePlayer, shipLocations4);
+			List<String> carrierLocations = new ArrayList<>();
+			carrierLocations.add("J1");
+			carrierLocations.add("J2");
+			carrierLocations.add("J3");
+			carrierLocations.add("J4");
+			carrierLocations.add("J5");
 
+			Ship ship = new Ship("PatrolBoat", gamePlayer, patrolBoatLocations);
+			Ship ship2 = new Ship("Submarine", gamePlayer, submarineLocations);
+			Ship ship3 = new Ship("Destroyer", gamePlayer, destroyerLocations);
+			Ship ship4 = new Ship("Carrier", gamePlayer, carrierLocations);
+			Ship ship5 = new Ship("Battleship", gamePlayer, battleshipLocations);
+
+			List<String> patrolBoatLocations2 = Arrays.asList("A1", "B1");
+			List<String> submarineLocations2 = Arrays.asList("E10", "F10", "G10");
+			List<String> destroyerLocations2 = Arrays.asList("H10", "I10", "J10");
+			List<String> carrierLocations2 = Arrays.asList("J1", "J2", "J3", "J4", "J5");
+			List<String> battleshipLocations2 = Arrays.asList("A10", "B10", "C10", "D10");
+
+			Ship shipb = new Ship("PatrolBoat", gamePlayer2, patrolBoatLocations2);
+			Ship shipb2 = new Ship("Submarine", gamePlayer2, submarineLocations2);
+			Ship shipb3 = new Ship("Destroyer", gamePlayer2, destroyerLocations2);
+			Ship shipb4 = new Ship("Carrier", gamePlayer2, carrierLocations2);
+			Ship shipb5 = new Ship("Battleship", gamePlayer2, battleshipLocations2);
 
 			shipRepository.save(ship);
 			shipRepository.save(ship2);
 			shipRepository.save(ship3);
 			shipRepository.save(ship4);
+			shipRepository.save(ship5);
+			shipRepository.save(shipb);
+			shipRepository.save(shipb2);
+			shipRepository.save(shipb3);
+			shipRepository.save(shipb4);
+			shipRepository.save(shipb5);
 
-			//agrego barco
-			gamePlayer.addShip(ship3);
-			gamePlayer2.addShip(ship2);
-			//gamePlayer3.addShip(ship);
-			//gamePlayer4.addShip(ship4);
 
-
-			List<String> salvoLocations = new ArrayList<>();
-			salvoLocations.add("H");
-
-			List<String> salvoLocations2 = Arrays.asList("A2", "A3");
-
+			List<String> salvoLocationsp1 = Arrays.asList("J3", "J2", "J1", "J4", "J5");
+			List<String> salvoLocations2p1 = Arrays.asList("H2", "H1", "I2", "I3", "I1");
+			/*
 			List<String> salvoLocations3 = new ArrayList<>();
 			salvoLocations3.add("A1");
+			*/
+			List<String> salvoLocations3p1 = Arrays.asList("G2", "G3", "G1");
+			List<String> salvoLocations4p1 = Arrays.asList("F4", "F3", "F2", "F1");
+
+			List<String> salvoLocationsp2 = Arrays.asList("A1","B1", "A10", "B10", "C10");
+			List<String> salvoLocations2p2 = Arrays.asList("D10", "E10", "F10", "G10", "H10");
+			List<String> salvoLocations3p2 = Arrays.asList("G5", "F5");
+			List<String> salvoLocations4p2 = Arrays.asList("J1", "J2", "J3", "J4", "J5");
+
+
 
 			//Juego 1
-			Salvo salvo = new Salvo(1, gamePlayer2, salvoLocations );
-			Salvo salvo2 = new Salvo(2, gamePlayer, salvoLocations2 );
-			Salvo salvo3 = new Salvo(3, gamePlayer2, salvoLocations3 );
+			Salvo salvo1 = new Salvo(1, gamePlayer2, salvoLocationsp1 );
+			Salvo salvo2 = new Salvo(2, gamePlayer2, salvoLocations2p1 );
+			Salvo salvo3 = new Salvo(3, gamePlayer2, salvoLocations3p1 );
+			Salvo salvo4 = new Salvo(4, gamePlayer2, salvoLocations4p1 );
+			Salvo salvo5 = new Salvo(1, gamePlayer, salvoLocationsp2 );
+			Salvo salvo6 = new Salvo(2, gamePlayer, salvoLocations2p2 );
+			Salvo salvo7 = new Salvo(3, gamePlayer, salvoLocations3p2 );
+			Salvo salvo8 = new Salvo(4, gamePlayer, salvoLocations4p2 );
+
 
 			//Juego 2
 			//Salvo salvo4 = new Salvo(2, gamePlayer3, salvoLocations2 );
 
-			salvoRepository.save(salvo);
+			salvoRepository.save(salvo1);
 			salvoRepository.save(salvo2);
 			salvoRepository.save(salvo3);
+			salvoRepository.save(salvo4);
+			salvoRepository.save(salvo5);
+			salvoRepository.save(salvo6);
+			salvoRepository.save(salvo7);
+			salvoRepository.save(salvo8);
 
 			Date dates = new Date();
 			Score score = new Score( (float) 0.5, dates, player1, game );
@@ -215,6 +254,9 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.loginPage("/api/login");
 
 		http.logout().logoutUrl("/api/logout");
+
+		//para la bd
+		http.headers().frameOptions().sameOrigin();
 
 
 		// turn off checking for CSRF tokens

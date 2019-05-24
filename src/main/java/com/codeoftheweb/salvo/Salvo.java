@@ -21,6 +21,8 @@ public class Salvo {
     @JoinColumn(name="gamePlayer_id")
     private GamePlayer gameplayer;
 
+    //tabla embebida
+    //entiende que debe hacer una tabla aparte
     @ElementCollection
     @Column(name="locations")
     private List<String> locations = new ArrayList<>();
