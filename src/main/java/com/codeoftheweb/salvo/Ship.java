@@ -26,7 +26,7 @@ public class Ship {
 
     @ElementCollection
     //Estoy agregando una columna, es mejor el mismo nombre para luego no estar diferenciando.
-    @Column(name="locations")
+    @Column(name="location")
     private List<String> locations = new ArrayList<>();
 
     public Ship(){}
@@ -34,6 +34,11 @@ public class Ship {
     public Ship(String type, GamePlayer gameplayer, List<String> locations) {
         this.type = type;
         this.gameplayer = gameplayer;
+        this.locations = locations;
+    }
+
+    public Ship(String type, List<String> locations) {
+        this.type = type;
         this.locations = locations;
     }
 

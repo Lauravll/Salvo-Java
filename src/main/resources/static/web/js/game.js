@@ -9,8 +9,6 @@ var salvoJSON;
 var salvoPositions = [];
 var waitState = false;
 
-//postShipLocations(makePostUrl());
-//postSalvo(makePostUrlSalvoes());
 refreshGameView(makeUrl());
 
 $('#logoutButton').on('click', function (event) {
@@ -390,7 +388,9 @@ function makeSalvoJSON() {
         salvoPositions.push(salvo5cellID);
     }
     salvoObject = {
-        salvoLocations : salvoPositions
+       // salvoLocations : salvoPositions
+       //turn : getTurn(gamePlayerData)
+       locations : salvoPositions
     }
 
     salvoJSON = JSON.stringify(salvoObject);

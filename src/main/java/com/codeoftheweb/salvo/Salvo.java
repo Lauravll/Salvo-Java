@@ -24,7 +24,7 @@ public class Salvo {
     //tabla embebida
     //entiende que debe hacer una tabla aparte
     @ElementCollection
-    @Column(name="locations")
+    @Column(name="shipLocation")
     private List<String> locations = new ArrayList<>();
 
     public Salvo() {
