@@ -81,6 +81,7 @@ function refreshGameView(_url) {
             }
             if (gamePlayerData.gameState === "WAITINGFOROPP"){
                 $('#battleGrids').show('puff', 'slow');
+
             }
 
             if (gamePlayerData.gameState === "WON"){
