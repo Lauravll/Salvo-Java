@@ -447,6 +447,14 @@ public class SalvoController {
     }
 
     //Metodo extra
+
+    /**
+     *
+     * @param id
+     * @param gamePlayer
+     * @param player
+     * @return
+     */
     private boolean WrongGamePlayer(long id, GamePlayer gamePlayer, Player player){
         boolean corretGP= gamePlayer.getPlayer().getId() != player.getId();
         return corretGP;
