@@ -402,8 +402,9 @@ public class SalvoController {
         } else {
             if (gamePlayer.getSalvoes().isEmpty()) {
                 for(Ship s: ships){
-                    shipRepository.save(s);
                     gamePlayer.addShip(s);
+                    shipRepository.save(s);
+                    System.out.println(s);
                 }
 
                 return new ResponseEntity<>(makeMap("ok", "Ships saved"), HttpStatus.CREATED);
@@ -430,7 +431,7 @@ public class SalvoController {
         else {
             if (salvoTurn(gamePlayer.getSalvoes(), salvo) == false) {
                 salvo.setTurn(gamePlayer.getSalvoes().size() +1);
-                //salvo.setGameplayer(gamePlayer);
+                salvo.setGameplayer(gamePlayer);
                 gamePlayer.addSalvo(salvo);
                 salvoRepository.save(salvo);
                 System.out.println(salvo);
@@ -492,6 +493,7 @@ public class SalvoController {
         for (Salvo salvo: salvoOrden) {
 
             List<String> celdasAcertadas = salvo.getLocations().stream().flatMap(salvoLocIndiv -> shipsself.stream().flatMap(ship -> ship.getLocations().stream().filter(shipLocIndiv -> shipLocIndiv.equals(salvoLocIndiv)))).collect(toList());
+
             Map <String, Integer> damageTotal = new HashMap <String, Integer> ();
 
             for (Ship ship: shipsself) {
