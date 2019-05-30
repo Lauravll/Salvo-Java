@@ -9,6 +9,9 @@ var salvoJSON;
 var salvoPositions = [];
 var waitState = false;
 
+//postShipLocations(makePostUrl());
+//postSalvo(makePostUrlSalvoes());
+
 refreshGameView(makeUrl());
 
 $('#logoutButton').on('click', function (event) {
@@ -81,7 +84,13 @@ function refreshGameView(_url) {
             }
             if (gamePlayerData.gameState === "WAITINGFOROPP"){
                 $('#battleGrids').show('puff', 'slow');
+                         setTimeout(
+                                            function()
+                                            {
+                                                refreshGameView(makeUrl());
+                                                console.log("...refreshing gameview SIMPLE...");
 
+                                            }, 10000);
             }
 
             if (gamePlayerData.gameState === "WON"){
@@ -290,7 +299,8 @@ function createTable(player) {
     mytable.appendTo(gridId);
 }
 
-function postShipLocations (postUrl) {
+function postShipLocations(postUrl) {
+    console.log(postUrl);
     $.post({
         url: postUrl,
         data: shipsJSON,
@@ -389,9 +399,9 @@ function makeSalvoJSON() {
         salvoPositions.push(salvo5cellID);
     }
     salvoObject = {
-       // salvoLocations : salvoPositions
-       //turn : getTurn(gamePlayerData)
-       locations : salvoPositions
+        //salvoLocations : salvoPositions
+        turn : getTurn(gamePlayerData),
+        locations: salvoPositions
     }
 
     salvoJSON = JSON.stringify(salvoObject);

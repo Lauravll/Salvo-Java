@@ -80,7 +80,6 @@ public class Ship {
         return "Ship{" +
                 "id=" + id +
                 ", type='" + type + '\'' +
-                ", gameplayer=" + gameplayer +
                 ", locations=" + locations +
                 '}';
     }
