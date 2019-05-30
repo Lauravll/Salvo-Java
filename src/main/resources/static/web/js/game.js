@@ -141,7 +141,7 @@ function refreshGameView(_url) {
                     '                <div class="droppable salvoCharger caught--it" id="salvoout3"><div class="draggable" id="salvo3"></div></div>\n' +
                     '                <div class="droppable salvoCharger caught--it" id="salvoout4"><div class="draggable" id="salvo4"></div></div>\n' +
                     '                <div class="droppable salvoCharger caught--it" id="salvoout5"><div class="draggable" id="salvo5"></div></div>\n' +
-                    '                <div class="textCenter"><button class="btn btn-warning" id="postSalvo">Fire Salvo!</button></div>\n' +
+                    '                <div class="textCenter"><button class="btn btn-nice" id="postSalvo">Fire Salvo!</button></div>\n' +
                     '            </div>');
 
                 resetSalvoCellIds();

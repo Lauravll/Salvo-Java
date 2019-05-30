@@ -123,10 +123,10 @@ body {
 }
 
 .salvoCellSelf {
-    background-image: url(../img/targetself.png);
+    background-image: url(../img/target.png);
     background-size: cover;
     /* background-color: #87cefa00; */
-    color: #888888;
+    color: white;
 }
 
 .hitCell {

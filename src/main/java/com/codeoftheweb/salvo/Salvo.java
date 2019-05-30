@@ -24,7 +24,7 @@ public class Salvo {
     //tabla embebida
     //entiende que debe hacer una tabla aparte
     @ElementCollection
-    @Column(name="shipLocation")
+    @Column(name="salvoLocation")
     private List<String> locations = new ArrayList<>();
 
     public Salvo() {
@@ -38,7 +38,6 @@ public class Salvo {
 
     public Salvo(int turn, List<String> locations) {
         this.turn = turn;
-        this.gameplayer = gameplayer;
         this.locations = locations;
     }
 
