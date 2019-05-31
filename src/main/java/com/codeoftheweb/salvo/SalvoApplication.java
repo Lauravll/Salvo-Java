@@ -54,7 +54,7 @@ public class SalvoApplication {
 	public CommandLineRunner initData(PlayerRepository playerRepository, GameRepository gameRepository, GamePlayerRepository gamePlayerRepository, ShipRepository shipRepository, SalvoRepository salvoRepository, ScoreRepository scoreRepository){
 
 		return (args) -> {
-
+/*
 			Player player1 = new Player("j.bauer@ctu.gov", passwordEncoder.encode("123"));
 			Player player2 = new Player ("c.obrian@ctu.gov", passwordEncoder.encode("123"));
 			Player player3 = new Player ("usuario3@ctu.gov", passwordEncoder.encode("123"));
@@ -149,6 +149,7 @@ public class SalvoApplication {
 			List<String> salvoLocations3 = new ArrayList<>();
 			salvoLocations3.add("A1");
 			*/
+/*
 			List<String> salvoLocations3p1 = Arrays.asList("G2", "G3", "G1");
 			List<String> salvoLocations4p1 = Arrays.asList("F4", "F3", "F2", "F1");
 
@@ -197,7 +198,7 @@ public class SalvoApplication {
 
 
 
-
+*/
 			//System.out.println(playerRepository.findByEmail("c.obrian@ctu.gov"));
 
 		};

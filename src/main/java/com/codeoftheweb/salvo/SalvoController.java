@@ -228,7 +228,7 @@ public class SalvoController {
     //~~~~~~~~~~~~~~~~~~~~~~~~List y DTO de Hits~~~~~~~~~~~~~~~~~~~~~~~~
     private  Map<String, Object> getHitsList(GamePlayer selfGP,GamePlayer opponentGP){
         Map<String, Object> dto = new LinkedHashMap<>();
-        dto.put("self", getHits(opponentGP.getSalvoes(), selfGP.getShips()));
+          dto.put("self", getHits(opponentGP.getSalvoes(), selfGP.getShips()));
         dto.put("opponent", getHits(selfGP.getSalvoes(), opponentGP.getShips()));
          return dto;
     }
