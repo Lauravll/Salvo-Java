@@ -488,7 +488,7 @@ function addDamagesIcons (numberOfHits, hitOrMissed) {
     }
         if (hitOrMissed === "hit") {
             for (var i = 0; i < numberOfHits; i++) {
-                damagesIcons += "<img class='hitblast' src='img/redhit.png'>"
+                damagesIcons += "<img class='hitblast' src='img/violetthit.png'>"
             }
     }
     return damagesIcons;

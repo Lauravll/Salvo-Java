@@ -157,11 +157,16 @@ public class SalvoController {
         Player authenticationPlayer = getAuthentication(authentication);
         //System.out.println(authenticationPlayer);
         GamePlayer opponentGamePlayer = gamePlayer.getGame().getGamePlayers().stream().filter(gpo ->gpo.getId() != gamePlayer.getId()).findFirst().orElse(null);
+        if (player == null)
+            return new ResponseEntity<>(makeMap("error", "no player"), HttpStatus.UNAUTHORIZED);
+        if (gamePlayer == null)
+            return new ResponseEntity<>(makeMap("error", "no such gamePlayer"), HttpStatus.UNAUTHORIZED);
         if(authenticationPlayer.getId() == player.getId()){
             return new ResponseEntity<>(gameViewDTO(gamePlayerRepository.findById(id).get()), HttpStatus.ACCEPTED);}
         else{
             return new ResponseEntity<>(makeMap("error", "Usuario no autorizado"), HttpStatus.UNAUTHORIZED);
         }
+
     }
 
     private GamePlayer getOpponent(GamePlayer gamePlayer) {
@@ -178,9 +183,20 @@ public class SalvoController {
         dto.put("created", gamePlayer.getDate().getTime());
         dto.put("gameState", getGameState(gamePlayer));
         dto.put("gamePlayers", getGamePlayerList(gamePlayer.getGame().getGamePlayers())); //utilizada en games
-        dto.put("ships", getShipList(gamePlayer.getShips()));
-        dto.put("salvoes", getSalvoList(gamePlayer.getGame()));
+        if (getOpponent(gamePlayer).getShips() == null || gamePlayer.getShips() == null){
+            dto.put("ships", new ArrayList());
+        }
+        else {
+            dto.put("ships", getShipList(gamePlayer.getShips()));
+        }
+        if (getOpponent(gamePlayer).getShips() == null || gamePlayer.getShips() == null){
+            dto.put("salvoes", new ArrayList());
+        }
+        else {
+            dto.put("salvoes", getSalvoList(gamePlayer.getGame()));
+        }
         dto.put("hits", getHitsList(gamePlayer, getOpponent(gamePlayer)));
+
         //dto.put("scores", getScoreList(gamePlayer.getGame().getScores()));
         return dto;
     }
@@ -228,8 +244,14 @@ public class SalvoController {
     //~~~~~~~~~~~~~~~~~~~~~~~~List y DTO de Hits~~~~~~~~~~~~~~~~~~~~~~~~
     private  Map<String, Object> getHitsList(GamePlayer selfGP,GamePlayer opponentGP){
         Map<String, Object> dto = new LinkedHashMap<>();
-          dto.put("self", getHits(opponentGP.getSalvoes(), selfGP.getShips()));
-        dto.put("opponent", getHits(selfGP.getSalvoes(), opponentGP.getShips()));
+        if (opponentGP == null){
+            dto.put("self", new ArrayList());
+            dto.put("opponent", new ArrayList());
+        }
+        else{
+           dto.put("self", getHits(opponentGP.getSalvoes(), selfGP.getShips()));
+           dto.put("opponent", getHits(selfGP.getSalvoes(), opponentGP.getShips()));
+        }
          return dto;
     }
 
