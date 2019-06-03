@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="windows-1252" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2019-06-03T20:49:39.630602800Z</date>
+  <millis>1559594979630</millis>
+  <nanos>602800</nanos>
+  <sequence>7</sequence>
+  <logger>com.codeoftheweb.salvo.SalvoController</logger>
+  <level>INFO</level>
+  <class>com.codeoftheweb.salvo.SalvoController</class>
+  <method>authenticationPlayer</method>
+  <thread>31</thread>
+  <message>Player autenticado -&gt; Player{id=6, email='c.obria2n@ctu.gov', password='{bcrypt}$2a$10$KAj5JKUSTDvn243bKGQqpeX1Ryuqsg4m8LQKuM/PN9NMlRzWrHDG2'}</message>
+</record>
+<record>
+  <date>2019-06-03T20:49:39.658630400Z</date>
+  <millis>1559594979658</millis>
+  <nanos>630400</nanos>
+  <sequence>8</sequence>
+  <logger>com.codeoftheweb.salvo.SalvoController</logger>
+  <level>INFO</level>
+  <class>com.codeoftheweb.salvo.SalvoController</class>
+  <method>authenticationPlayer</method>
+  <thread>31</thread>
+  <message>Probando...</message>
+</record>
+<record>
+  <date>2019-06-03T20:49:39.659631600Z</date>
+  <millis>1559594979659</millis>
+  <nanos>631600</nanos>
+  <sequence>9</sequence>
+  <logger>com.codeoftheweb.salvo.SalvoController</logger>
+  <level>SEVERE</level>
+  <class>com.codeoftheweb.salvo.SalvoController</class>
+  <method>authenticationPlayer</method>
+  <thread>31</thread>
+  <message>Se ha producido un error</message>
+</record>

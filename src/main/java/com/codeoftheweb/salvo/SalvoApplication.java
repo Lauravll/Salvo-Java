@@ -29,9 +29,13 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import java.util.logging.Logger;
+
 
 @SpringBootApplication
 public class SalvoApplication {
+
+	private static final Logger LOGGER = Logger.getLogger(SalvoApplication.class.getName());
 
 	@Autowired
 	PasswordEncoder passwordEncoder;

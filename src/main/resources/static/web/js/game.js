@@ -79,10 +79,10 @@ function refreshGameView(_url) {
                 makeGameRecordTable(gamePlayerData.hits.self, "gameRecordSelfTable");
             }
 
-            if (gamePlayerData.gameState === "UBICAR-BARCOS"){
+            if (gamePlayerData.gameState === "UBICAR BARCOS"){
                 $('#placingShipsBoard').show('puff', 'slow');
             }
-            if (gamePlayerData.gameState === "ESPERANDO-OPONENTE"){
+            if (gamePlayerData.gameState === "ESPERANDO OPONENTE"){
                 $('#battleGrids').show('puff', 'slow');
                          setTimeout(
                                             function()
@@ -93,7 +93,7 @@ function refreshGameView(_url) {
                                             }, 10000);
             }
 
-            if (gamePlayerData.gameState === "GANO"){
+            if (gamePlayerData.gameState === "GANÓ"){
                 showSelf(gamePlayerData);
                 makeGameRecordTable(gamePlayerData.hits.opponent, "gameRecordOppTable");
                 makeGameRecordTable(gamePlayerData.hits.self, "gameRecordSelfTable");
@@ -101,7 +101,7 @@ function refreshGameView(_url) {
                 $('#gameRecordBlock').show('puff', 'slow');
                 console.log("yes you won");
             }
-            if (gamePlayerData.gameState === "EMPATO"){
+            if (gamePlayerData.gameState === "EMPATÓ"){
                 showSelf(gamePlayerData);
                 makeGameRecordTable(gamePlayerData.hits.opponent, "gameRecordOppTable");
                 makeGameRecordTable(gamePlayerData.hits.self, "gameRecordSelfTable");
@@ -109,7 +109,7 @@ function refreshGameView(_url) {
                 $('#gameRecordBlock').show('puff', 'slow');
                 console.log("TIED MATCH");
             }
-            if (gamePlayerData.gameState === "PERDIO"){
+            if (gamePlayerData.gameState === "PERDIÓ"){
                 showSelf(gamePlayerData);
                 makeGameRecordTable(gamePlayerData.hits.opponent, "gameRecordOppTable");
                 makeGameRecordTable(gamePlayerData.hits.self, "gameRecordSelfTable");

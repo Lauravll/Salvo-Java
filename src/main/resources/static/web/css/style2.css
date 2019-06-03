@@ -1,12 +1,10 @@
 body {
-    background: url(../img/back3.gif);
-    font-family: 'Dosis', sans-serif;
-    webkit-background-size: cover;
-      -moz-background-size: cover;
-      -o-background-size: cover;
-      background-size: cover;
-}
+    background: url(../img/back2.jfif);
 
+    font-family: 'Dosis', sans-serif;
+
+
+}
 
 .bannerTitle {
     margin: 15px auto 0;

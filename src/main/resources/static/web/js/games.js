@@ -197,11 +197,11 @@ function showGamesTable(gamesData) {
                     $('<td>' + gamesData[i].gamePlayers[j].player.email + '</td>').appendTo(row);
                 }
                 if (gamesData[i].gamePlayers.length == 1 && (data.player == "Invitado" || data.player.id == gamesData[i].gamePlayers[j].player.id)) {
-                    $('<td>' + gamesData[i].gamePlayers[0].player.email + '</td><td class="yellow500">ESPERANDO JUGADOR</td>').appendTo(row);
+                    $('<td>' + gamesData[i].gamePlayers[0].player.email + '</td><td class="yellow500">Esperando jugador</td>').appendTo(row);
                 }
                 if (gamesData[i].gamePlayers.length == 1 && data.player.id != null && data.player.id != gamesData[i].gamePlayers[j].player.id) {
-                    $('<td>' + gamesData[i].gamePlayers[0].player.email + '</td><td class="yellow500">ESPERANDO JUGADOR</td>').appendTo(row);
-                    joinButtonHtml = '<td class="textCenter"><button class="joinGameButton btn btn-info" data-gameid=' + '"' + gamesData[i].id + '"' + '>UNIRSE AL JUEGO</button></td>';
+                    $('<td>' + gamesData[i].gamePlayers[0].player.email + '</td><td class="yellow500">Esperando jugador</td>').appendTo(row);
+                    joinButtonHtml = '<td class="textCenter"><button class="joinGameButton btn btn-info" data-gameid=' + '"' + gamesData[i].id + '"' + '>Unirse al Juego</button></td>';
 
                 }
                 if (gamesData[i].gamePlayers[j].player.id == data.player.id) {
@@ -212,7 +212,7 @@ function showGamesTable(gamesData) {
 
             if (isLoggedPlayer === true) {
                 let gameUrl = "/web/game.html?gp=" + gpid;
-                $('<td class="textCenter"><a href=' + '"' + gameUrl + '"' + 'class="btn btn-nice" role="button">ENTRAR AL JUEGO</a></td>').appendTo(row);
+                $('<td class="textCenter"><a href=' + '"' + gameUrl + '"' + 'class="btn btn-nice" role="button">Entrar al Juego</a></td>').appendTo(row);
             } else if (joinButtonHtml !== null){
                 $(joinButtonHtml).appendTo(row);
             } else {

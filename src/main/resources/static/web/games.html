@@ -15,13 +15,6 @@
             crossorigin="anonymous"></script>
     <title>Batalla Naval Salvo</title>
 
-    <style>
-  .btn-nice{
-  background-color:#8D82DD;
-  color: white;
-
-  }
-  </style>
 </head>
 
 <body>
@@ -38,7 +31,7 @@
             </div>
             <div class="col-sm-8">
                 <form class="form-inline" id="login-form" onsubmit="return false">
-                    <label for="username">Email:</label><input class="form-control" id="username" type="email" name="username" required>
+                    <label for="username">Email:</label><input class="form-control" id="username" type="email" maxlength="30" name="username" required>
                     <label for="password">Contraseña:</label><input class="form-control" id="password" type="password" name="password" required>
                     <input type="submit" class="form-control submitbutton btn btn-info" name="login" value="Ingresar" />
                     <input type="submit" class="form-control submitbutton btn btn-info" name="signup" value="Registrarse" />
@@ -56,7 +49,7 @@
     <h3 id="gameJoinedSuccess" class="textCenter">Unión al juego satisfactorio! Redireccionando a la página del juego...</h3>
 
     <form class="textCenter" id="createGame" onsubmit="return false">
-        <button type="submit" class="btn btn-nice">CREAR NUEVO JUEGO</button>
+        <button type="submit" class="btn btn-nice ">CREAR NUEVO JUEGO</button>
     </form>
 
 

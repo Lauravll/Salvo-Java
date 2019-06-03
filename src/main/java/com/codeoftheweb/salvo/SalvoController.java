@@ -9,8 +9,20 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+
+// Los handler (manejadores) indican a donde mandar la salida ya sea consola o archivo
+// En este caso ConsoleHandler envia los logs a la consola
+
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.FileHandler;
+import java.util.logging.SimpleFormatter;
+
 
 import static java.util.stream.Collectors.toList;
 
@@ -19,6 +31,8 @@ import static java.util.stream.Collectors.toList;
 @RestController
 @RequestMapping("/api")
 public class SalvoController {
+
+    private static final Logger LOGGER = Logger.getLogger(SalvoController.class.getName());
 
     //have one singleton instance that every class shares.
     //tells Spring to automatically create an instance of PersonRepository and store it in the instance variable personRepository.
@@ -39,10 +53,16 @@ public class SalvoController {
 
     //~~~~~~~~~~~~~~~~~~~~~~~~Autentificacion del jugador~~~~~~~~~~~~~~~~~~~~~~~~
     @RequestMapping("/games")
-    public Map<String, Object> authenticationPlayer(Authentication authentication) {
+    public Map<String, Object> authenticationPlayer(Authentication authentication) throws IOException {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         authentication = SecurityContextHolder.getContext().getAuthentication();
         Player authenticationPlayer = getAuthentication(authentication);
+        LOGGER.log(Level.INFO, () -> "Player autenticado -> " + authenticationPlayer);
+        LOGGER.info("Probando...");
+        LOGGER.setLevel(Level.INFO);
+        LOGGER.severe("Se ha producido un error");
+        FileHandler fileXml = new FileHandler("Logging.xml");
+        LOGGER.addHandler(fileXml);
         if (authenticationPlayer == null)
             dto.put("player", "Invitado");
         else
@@ -477,10 +497,10 @@ public class SalvoController {
     private String getGameState(GamePlayer selfGamePlayer){
         GamePlayer opponentGamePlayer = selfGamePlayer.getGame().getGamePlayers().stream().filter(gpo ->gpo.getId() != selfGamePlayer.getId()).findFirst().orElse(null);
         if (selfGamePlayer.getShips().size() == 0){
-            return "UBICAR-BARCOS";
+            return "UBICAR BARCOS";
         }
         if (opponentGamePlayer == null || opponentGamePlayer.getShips() == null){
-            return "ESPERANDO-OPONENTE";
+            return "ESPERANDO OPONENTE";
         }
         int turn = getCurrentTurn(selfGamePlayer, opponentGamePlayer);
         if (opponentGamePlayer.getShips().size() == 0){
@@ -495,7 +515,7 @@ public class SalvoController {
                 if(!existScore(score, game)) {
                     scoreRepository.save(score);
                 }
-                return "EMPATO";
+                return "EMPATÓ";
             }
             //Si self tiene todos los ships sunk
             if (totallyShipsSunk(selfGamePlayer.getShips(),opponentGamePlayer.getSalvoes())){
@@ -503,7 +523,7 @@ public class SalvoController {
                 if(!existScore(score, game)) {
                     scoreRepository.save(score);
                 }
-                return "PERDIO";
+                return "PERDIÓ";
             }
             //si opponent tiene todos los ships sunk
             if(totallyShipsSunk(opponentGamePlayer.getShips(), selfGamePlayer.getSalvoes())){
@@ -511,7 +531,7 @@ public class SalvoController {
                 if(!existScore(score, game)) {
                     scoreRepository.save(score);
                 }
-                return "GANO";
+                return "GANÓ";
             }
         }
         if (selfGamePlayer.getSalvoes().size() != turn){
