@@ -160,7 +160,7 @@ function updateView() {
         showGamesTable(gamesData);
         addScoresToPlayersArray(getPlayers(gamesData));
         showScoreBoard(playersArray);
-        if (data.player == "Guest") {
+        if (data.player == "Invitado") {
             $('#currentPlayer').text(data.player);
             $('#logout-form').hide("slow");
             $('#login-form').show("slow");
@@ -196,12 +196,12 @@ function showGamesTable(gamesData) {
                 if (gamesData[i].gamePlayers.length == 2) {
                     $('<td>' + gamesData[i].gamePlayers[j].player.email + '</td>').appendTo(row);
                 }
-                if (gamesData[i].gamePlayers.length == 1 && (data.player == "Guest" || data.player.id == gamesData[i].gamePlayers[j].player.id)) {
-                    $('<td>' + gamesData[i].gamePlayers[0].player.email + '</td><td class="yellow500">WAITING FOR PLAYER</td>').appendTo(row);
+                if (gamesData[i].gamePlayers.length == 1 && (data.player == "Invitado" || data.player.id == gamesData[i].gamePlayers[j].player.id)) {
+                    $('<td>' + gamesData[i].gamePlayers[0].player.email + '</td><td class="yellow500">ESPERANDO JUGADOR</td>').appendTo(row);
                 }
                 if (gamesData[i].gamePlayers.length == 1 && data.player.id != null && data.player.id != gamesData[i].gamePlayers[j].player.id) {
-                    $('<td>' + gamesData[i].gamePlayers[0].player.email + '</td><td class="yellow500">WAITING FOR PLAYER</td>').appendTo(row);
-                    joinButtonHtml = '<td class="textCenter"><button class="joinGameButton btn btn-info" data-gameid=' + '"' + gamesData[i].id + '"' + '>JOIN GAME</button></td>';
+                    $('<td>' + gamesData[i].gamePlayers[0].player.email + '</td><td class="yellow500">ESPERANDO JUGADOR</td>').appendTo(row);
+                    joinButtonHtml = '<td class="textCenter"><button class="joinGameButton btn btn-info" data-gameid=' + '"' + gamesData[i].id + '"' + '>UNIRSE AL JUEGO</button></td>';
 
                 }
                 if (gamesData[i].gamePlayers[j].player.id == data.player.id) {
@@ -212,7 +212,7 @@ function showGamesTable(gamesData) {
 
             if (isLoggedPlayer === true) {
                 let gameUrl = "/web/game.html?gp=" + gpid;
-                $('<td class="textCenter"><a href=' + '"' + gameUrl + '"' + 'class="btn btn-nice" role="button">ENTER GAME</a></td>').appendTo(row);
+                $('<td class="textCenter"><a href=' + '"' + gameUrl + '"' + 'class="btn btn-nice" role="button">ENTRAR AL JUEGO</a></td>').appendTo(row);
             } else if (joinButtonHtml !== null){
                 $(joinButtonHtml).appendTo(row);
             } else {

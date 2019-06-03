@@ -506,7 +506,7 @@ button:focus {
 }
 
 .selfTdCell {
-    border: 1px dashed #eab105;
+    border: 1px dashed white/*#eab105*/;
     border-left-width: 0;
     border-top-width: 0;
 

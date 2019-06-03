@@ -187,14 +187,14 @@ $('#grid1').on('change', function(event, items) {
 
 $('#grid1').on('dragstart', function(event, ui) {
     notMoved = $('#' + event.target.id + 'Position').text();
-    $('.movingMsgBig').html("..." + event.target.id + "<br>is moving...");
-    $('#' + event.target.id + 'Position').text("waiting new position").addClass('movingShip');
+    $('.movingMsgBig').html("..." + event.target.id + "<br>en movimiento...");
+    $('#' + event.target.id + 'Position').text("esperando nueva posición").addClass('movingShip');
 
 });
 
 $('#grid1').on('dragstop', function(event, ui) {
 
-    $('.movingMsgBig').html(event.target.id + "<br>relocated!");
+    $('.movingMsgBig').html(event.target.id + "<br>reubicado!");
     $('#' + event.target.id + 'Position').text(notMoved).removeClass('movingShip');
 
 

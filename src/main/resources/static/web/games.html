@@ -13,7 +13,7 @@
             src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
-    <title>Beringar Salvo Game</title>
+    <title>Batalla Naval Salvo</title>
 
     <style>
   .btn-nice{
@@ -32,16 +32,16 @@
         <div class="col-sm-12">
             <div class="row">
             <div class="col-sm-4">
-                <div class="currentPlayerContainer">Current player: <span id="currentPlayer"></span><form class="form" id="logout-form" onsubmit="return false">
-                    <button type="submit" class="btn btn-info">Log out</button></form>
+                <div class="currentPlayerContainer">Jugador Actual: <span id="currentPlayer"></span><form class="form" id="logout-form" onsubmit="return false">
+                    <button type="submit" class="btn btn-info">Salir</button></form>
                 </div>
             </div>
             <div class="col-sm-8">
                 <form class="form-inline" id="login-form" onsubmit="return false">
-                    <label for="username">Name:</label><input class="form-control" id="username" type="email" name="username" required>
-                    <label for="password">Password:</label><input class="form-control" id="password" type="password" name="password" required>
-                    <input type="submit" class="form-control submitbutton btn btn-info" name="login" value="Login" />
-                    <input type="submit" class="form-control submitbutton btn btn-info" name="signup" value="Sign Up" />
+                    <label for="username">Email:</label><input class="form-control" id="username" type="email" name="username" required>
+                    <label for="password">Contraseña:</label><input class="form-control" id="password" type="password" name="password" required>
+                    <input type="submit" class="form-control submitbutton btn btn-info" name="login" value="Ingresar" />
+                    <input type="submit" class="form-control submitbutton btn btn-info" name="signup" value="Registrarse" />
                 </form>
             </div>
             </div>
@@ -49,36 +49,36 @@
     </div>
     <h3 id="signupSuccess" class="textCenter">Jugador creado satisfactoriamente!</h3>
     <h3 id="errorSignup" class="textCenter">Error: El usuario ya existe</h3>
-    <h3 id="loginSuccess" class="textCenter">Login Successful!</h3>
-    <h3 id="loginFailed" class="textCenter">Login failed! Bad credentials!</h3>
-    <h3 id="logoutSuccess" class="textCenter">Logout Successful!</h3>
-    <h3 id="gameCreatedSuccess" class="textCenter">Game Created Successfully! Redirecting to Game Page...</h3>
-    <h3 id="gameJoinedSuccess" class="textCenter">Game Joined Successfully! Redirecting to Game Page...</h3>
+    <h3 id="loginSuccess" class="textCenter">Ingreso Satisfactorio!</h3>
+    <h3 id="loginFailed" class="textCenter">Error de Ingreso! Credenciales incorrectas!</h3>
+    <h3 id="logoutSuccess" class="textCenter">Salida Satisfactoria!</h3>
+    <h3 id="gameCreatedSuccess" class="textCenter">Juego creado satisfactoriamente! Redireccionando a la página del juego...</h3>
+    <h3 id="gameJoinedSuccess" class="textCenter">Unión al juego satisfactorio! Redireccionando a la página del juego...</h3>
 
     <form class="textCenter" id="createGame" onsubmit="return false">
-        <button type="submit" class="btn btn-nice">CREATE NEW GAME</button>
+        <button type="submit" class="btn btn-nice">CREAR NUEVO JUEGO</button>
     </form>
 
 
 
     <div class="row">
         <div class="col-sm-12">
-        <div class="textCenter whiteColor"><h2>GAME LIST</h2></div>
+        <div class="textCenter whiteColor"><h2>LISTA DE JUEGOS</h2></div>
         <div>
         <table class="table table-striped table-dark" id="gamesList">
             <thead>
-            <tr><th class="textCenter">Game ID</th><th>Created</th><th>Player 1</th><th>Player 2</th><th class="textCenter">Game Actions</th></tr>
+            <tr><th class="textCenter">ID DE JUEGO</th><th>Creado</th><th>Jugador 1</th><th>Jugador 2</th><th class="textCenter">Acciones</th></tr>
             </thead>
             <tbody>
             </tbody>
         </table>
         </div>
 
-        <div class="textCenter whiteColor"><h2>LEADERBOARD</h2></div>
+        <div class="textCenter whiteColor"><h2>TABLA DE LÍDERES</h2></div>
         <div>
         <table class="table table-striped table-dark" id="scoreBoard">
                 <thead>
-                <tr><th>Name</th><th class="textCenter">Total Score</th><th class="textCenter">Won</th><th class="textCenter">Lost</th><th class="textCenter">Tied</th></tr>
+                <tr><th>Nombre</th><th class="textCenter">Puntaje Total</th><th class="textCenter">Ganó</th><th class="textCenter">Perdió</th><th class="textCenter">Empató</th></tr>
                 </thead>
                 <tbody>
                 </tbody>

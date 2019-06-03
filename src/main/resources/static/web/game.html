@@ -35,6 +35,7 @@
     <style>
   .btn-nice{
   background-color:#8D82DD;
+  color: white;
 
   }
   </style>
@@ -49,11 +50,11 @@
         <a href="games.html"><img class="bannerImage" src="img/titlebannersalvo.png"></a>
             </div>
             <div class="col-sm-6">
-        <div id="gamePlayerDetails" class="gameDetails blockInline"></div><div class="blockInline"><button id="logoutButton" class="btn btn-info">Log out</button></div>
+        <div id="gamePlayerDetails" class="gameDetails blockInline"></div><div class="blockInline"><button id="logoutButton" class="btn btn-info">Salir</button></div>
             </div>
             </div>
     </div>
-    <h3 id="logoutSuccess" class="textCenter">Logout Successful!</h3>
+        <h3 id="logoutSuccess" class="textCenter">Logout Satisfactorio!</h3>
     <div id="errorMsg" class="alert alert-danger textCenter"></div>
     <div id="gameStateBlock" class="textCenter"></div>
     <h3 id="okSalvo" class="textCenter"></h3>
@@ -80,10 +81,10 @@
 
 
             <div class="col-sm-12 textCenter">
-                <div class="placeshipsInstructions">Place your ships by dragging and dropping them onto desired positions.<br>You can rotate ships by clicking <img class="rotateIcon" src="img/rotatewhite.png"> icon on every ship.<br>When you finish positioning click on PLACE SHIPS button to begin the battle!</div>
+                <div class="placeshipsInstructions">Coloque sus barcos arrastrándolos y soltándolos en las posiciones deseadas.<br>Puedes rotar tus barcos clickeando <img class="rotateIcon" src="img/rotatewhite.png"> el ícono en cada barco.<br>Cuando termines de posicionarlos clickea en en el botón POSICIONAR BARCOS! para comenzar la batalla!</div>
                 <h3 id="okShips" class="textCenter"></h3>
                 <h3 id="errorShips" class="textCenter"></h3>
-                <button class="btn btn-outline-light" id="save-grid">PLACE SHIPS!</button>
+                <button class="btn btn-outline-light" id="save-grid">POSICIONAR BARCOS!</button>
                 <br>
             </div>
         </div>
@@ -91,7 +92,7 @@
             <div class="row">
 
         <div class="col-sm-6">
-            <div class="textCenter"><h4 class="gridTopLabel">Your Ships</h4><h4 class="textCenter" id="currentPlayerName"></h4></div>
+            <div class="textCenter"><h4 class="gridTopLabel">Tus barcos</h4><h4 class="textCenter" id="currentPlayerName"></h4></div>
             <div id="shipsLeftIcons" class="textCenter">
                 <span id="carrierIcon"><img src="img/carrierafloat.png"></span>
                 <span id="battleshipIcon"><img src="img/battleshipafloat.png"></span>
@@ -255,7 +256,7 @@
 
 
         <div class="col-sm-6">
-<div class="textCenter"><h4 class="gridTopLabel">Your Opponent</h4><h4 class="textCenter" id="OpponentPlayerName"></h4></div>
+<div class="textCenter"><h4 class="gridTopLabel">Tu oponente</h4><h4 class="textCenter" id="OpponentPlayerName"></h4></div>
             <div id="shipsLeftIconsOpp" class="textCenter">
                 <span id="oppcarrierIcon"><img src="img/carrierafloat.png"></span>
                 <span id="oppbattleshipIcon"><img src="img/battleshipafloat.png"></span>
@@ -430,7 +431,7 @@
                   <col class="columnTurn">
                   <col class="columnDamages">
                   <thead>
-                  <th class="textCenter">Turn</th><th>Damages on my fleat</th>
+                  <th class="textCenter">Turno</th><th>Daños en mi flota</th>
                   </thead>
                   <tbody></tbody>
               </table>
@@ -442,7 +443,7 @@
                     <col class="columnTurn">
                     <col class="columnDamages">
                     <thead>
-                    <th class="textCenter">Turn</th><th>Damages on Opponent's fleat</th>
+                    <th class="textCenter">Turno</th><th>Daños en la flota de mi oponente</th>
                     </thead>
                     <tbody></tbody>
                 </table>

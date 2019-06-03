@@ -69,7 +69,7 @@ function refreshGameView(_url) {
 
 
 
-            $('#gameStateBlock').html('<span class="gameStateLabel">TURN: </span><span class="gameStateLabelBig">' + getTurn(gamePlayerData) + '</span><span class="gameStateLabel"> ACTION REQUIRED: </span><span class="gameStateLabelBig">' + gamePlayerData.gameState + '</span>');
+            $('#gameStateBlock').html('<span class="gameStateLabel">TURNO: </span><span class="gameStateLabelBig">' + getTurn(gamePlayerData) + '</span><span class="gameStateLabel"> ACCIÓN REQUERIDA: </span><span class="gameStateLabelBig">' + gamePlayerData.gameState + '</span>');
 
             console.log("waitState: " + waitState);
 
@@ -79,10 +79,10 @@ function refreshGameView(_url) {
                 makeGameRecordTable(gamePlayerData.hits.self, "gameRecordSelfTable");
             }
 
-            if (gamePlayerData.gameState === "PLACESHIPS"){
+            if (gamePlayerData.gameState === "UBICAR-BARCOS"){
                 $('#placingShipsBoard').show('puff', 'slow');
             }
-            if (gamePlayerData.gameState === "WAITINGFOROPP"){
+            if (gamePlayerData.gameState === "ESPERANDO-OPONENTE"){
                 $('#battleGrids').show('puff', 'slow');
                          setTimeout(
                                             function()
@@ -93,7 +93,7 @@ function refreshGameView(_url) {
                                             }, 10000);
             }
 
-            if (gamePlayerData.gameState === "WON"){
+            if (gamePlayerData.gameState === "GANO"){
                 showSelf(gamePlayerData);
                 makeGameRecordTable(gamePlayerData.hits.opponent, "gameRecordOppTable");
                 makeGameRecordTable(gamePlayerData.hits.self, "gameRecordSelfTable");
@@ -101,7 +101,7 @@ function refreshGameView(_url) {
                 $('#gameRecordBlock').show('puff', 'slow');
                 console.log("yes you won");
             }
-            if (gamePlayerData.gameState === "TIE"){
+            if (gamePlayerData.gameState === "EMPATO"){
                 showSelf(gamePlayerData);
                 makeGameRecordTable(gamePlayerData.hits.opponent, "gameRecordOppTable");
                 makeGameRecordTable(gamePlayerData.hits.self, "gameRecordSelfTable");
@@ -109,7 +109,7 @@ function refreshGameView(_url) {
                 $('#gameRecordBlock').show('puff', 'slow');
                 console.log("TIED MATCH");
             }
-            if (gamePlayerData.gameState === "LOST"){
+            if (gamePlayerData.gameState === "PERDIO"){
                 showSelf(gamePlayerData);
                 makeGameRecordTable(gamePlayerData.hits.opponent, "gameRecordOppTable");
                 makeGameRecordTable(gamePlayerData.hits.self, "gameRecordSelfTable");
@@ -117,7 +117,7 @@ function refreshGameView(_url) {
                 $('#gameRecordBlock').show('puff', 'slow');
                 console.log("OH YOU LOST");
             }
-            if (gamePlayerData.gameState === "WAIT"){
+            if (gamePlayerData.gameState === "ESPERE"){
                 $('#battleGrids').show('puff', 'slow');
                 $('#salvoBlock').hide('puff', 'slow');
                 $('#gameRecordBlock').show('puff', 'slow');
@@ -130,7 +130,7 @@ function refreshGameView(_url) {
 
                     }, 5000);
             }
-            if (gamePlayerData.gameState == "PLAY"){
+            if (gamePlayerData.gameState == "JUEGUE"){
                 showSelf(gamePlayerData);
                 makeGameRecordTable(gamePlayerData.hits.opponent, "gameRecordOppTable");
                 makeGameRecordTable(gamePlayerData.hits.self, "gameRecordSelfTable");
@@ -141,7 +141,7 @@ function refreshGameView(_url) {
                     '                <div class="droppable salvoCharger caught--it" id="salvoout3"><div class="draggable" id="salvo3"></div></div>\n' +
                     '                <div class="droppable salvoCharger caught--it" id="salvoout4"><div class="draggable" id="salvo4"></div></div>\n' +
                     '                <div class="droppable salvoCharger caught--it" id="salvoout5"><div class="draggable" id="salvo5"></div></div>\n' +
-                    '                <div class="textCenter"><button class="btn btn-nice" id="postSalvo">Fire Salvo!</button></div>\n' +
+                    '                <div class="textCenter"><button class="btn btn-nice" id="postSalvo">Disparar salvo!</button></div>\n' +
                     '            </div>');
 
                 resetSalvoCellIds();
@@ -149,7 +149,7 @@ function refreshGameView(_url) {
                 $('#postSalvo').click(function () {
                     makeSalvoJSON();
                     if (salvoPositions.length === 0){
-                        $('#errorSalvo').text("Error! No salvos to fire! You must set at least one target!");
+                        $('#errorSalvo').text("Error! No hay salvos a disparar! Debes elegir al menos uno!");
                         $('#errorSalvo').show( "slow" ).delay(3000).hide( "slow" );
                         console.log("No salvos to shoot!");
                     } else {
@@ -189,13 +189,13 @@ function showSelf (gamePlayerData) {
     });
 
     if (viewer === "") {
-        viewer = "Waiting for player!";
+        viewer = "Esperando al jugador!";
         $('#OpponentPlayerName').addClass('waitingPlayer');
     }
 
     let DateCreated = new Date(gamePlayerData.created);
     DateCreated = DateCreated.getMonth() + 1 + "/" + DateCreated.getDate() + " " + DateCreated.getHours() + ":" + DateCreated.getMinutes();
-    $('#gamePlayerDetails').html('<span class="labelGame">Game ID: </span><span class="labelGameBig">' + gamePlayerData.id + '</span><span class="labelGame"> Created: </span><span class="labelGameBig">' + DateCreated + '</span>');
+    $('#gamePlayerDetails').html('<span class="labelGame">Juego ID: </span><span class="labelGameBig">' + gamePlayerData.id + '</span><span class="labelGame"> Creado: </span><span class="labelGameBig">' + DateCreated + '</span>');
     $('#currentPlayerName').text(you);
     $('#OpponentPlayerName').text(viewer);
 
@@ -426,7 +426,7 @@ function makeGameRecordTable (hitsArray, gameRecordTableId) {
         if (playTurn.damages.carrierHits > 0){
             hitsReport += "Carrier " + addDamagesIcons(playTurn.damages.carrierHits, "hit") + " ";
             if (playTurn.damages.carrier === 5){
-                hitsReport += "SUNK! ";
+                hitsReport += "Hundido! ";
                 $(playerTag + 'carrierIcon').html('<img src="img/carriersunk.png">');
                 shipsAfloat--;
             }
@@ -435,7 +435,7 @@ function makeGameRecordTable (hitsArray, gameRecordTableId) {
         if (playTurn.damages.battleshipHits > 0){
             hitsReport += "Battleship " + addDamagesIcons(playTurn.damages.battleshipHits, "hit") + " ";
             if (playTurn.damages.battleship === 4){
-                hitsReport += "SUNK! ";
+                hitsReport += "Hundido! ";
                 $(playerTag + 'battleshipIcon').html('<img src="img/battleshipsunk.png">');
                 shipsAfloat--;
             }
@@ -443,7 +443,7 @@ function makeGameRecordTable (hitsArray, gameRecordTableId) {
         if (playTurn.damages.submarineHits > 0){
             hitsReport += "Submarine " + addDamagesIcons(playTurn.damages.submarineHits, "hit") + " ";
             if (playTurn.damages.submarine === 3){
-                hitsReport += "SUNK! ";
+                hitsReport += "Hundido! ";
                 $(playerTag + 'submarineIcon').html('<img src="img/submarinesunk.png">');
                 shipsAfloat--;
             }
@@ -451,7 +451,7 @@ function makeGameRecordTable (hitsArray, gameRecordTableId) {
         if (playTurn.damages.destroyerHits > 0){
             hitsReport += "Destroyer " + addDamagesIcons(playTurn.damages.destroyerHits, "hit") + " ";
             if (playTurn.damages.destroyer === 3){
-                hitsReport += "SUNK! ";
+                hitsReport += "Hundido! ";
                 $(playerTag + 'destoyerIcon').html('<img src="img/destoyersunk.png">');
                 shipsAfloat--;
             }
@@ -459,18 +459,18 @@ function makeGameRecordTable (hitsArray, gameRecordTableId) {
         if (playTurn.damages.patrolboatHits > 0){
             hitsReport += "Patrol Boat " + addDamagesIcons(playTurn.damages.patrolboatHits, "hit") + " ";
             if (playTurn.damages.patrolboat === 2){
-                hitsReport += "SUNK! ";
+                hitsReport += "Hundido! ";
                 $(playerTag + 'patrolboatIcon').html('<img src="img/patrolboatsunk.png">');
                 shipsAfloat--;
             }
         }
 
         if (playTurn.missed > 0){
-            hitsReport +=  "Missed shots " + addDamagesIcons(playTurn.missed, "missed") + " ";
+            hitsReport +=  "Disparos perdidos " + addDamagesIcons(playTurn.missed, "missed") + " ";
         }
 
         if (hitsReport === ""){
-            hitsReport = "All salvoes missed! No damages!"
+            hitsReport = "Todos los disparos fueron perdidos! No hay daños!"
         }
 
         $('<tr><td class="textCenter">' + playTurn.turn + '</td><td>' + hitsReport + '</td></tr>').prependTo(tableId);
