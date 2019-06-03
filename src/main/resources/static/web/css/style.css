@@ -2,6 +2,7 @@ body {
     background: url(../img/back2.jfif);
 
     font-family: 'Dosis', sans-serif;
+
 }
 
 .bannerTitle {
@@ -67,15 +68,15 @@ body {
 
 #loginFailed, #errorSignup, #errorShips, #errorSalvo {
     display: none;
-    background-color: indianred;
+    background-color: black;
     color: white;
     padding: 10px;
 }
 
 #signupSuccess {
     display: none;
-    background-color: darkorange;
-    color: black;
+    background-color: #5950aa;
+    color: white;
     padding: 10px;
 }
 
@@ -85,7 +86,7 @@ body {
 
 #loginSuccess, #logoutSuccess, #gameCreatedSuccess, #gameJoinedSuccess, #okShips, #okSalvo {
     display: none;
-    background-color: forestgreen;
+    background-color: #064c82;
     color: white;
     padding: 10px;
 }

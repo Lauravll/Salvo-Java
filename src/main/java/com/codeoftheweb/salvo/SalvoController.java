@@ -316,7 +316,7 @@ public class SalvoController {
             return new ResponseEntity<>(makeMap("error", "Faltan datos"), HttpStatus.FORBIDDEN);
         }
         if (playerRepository.findByEmail(username) !=  null) {
-            return new ResponseEntity<>(makeMap("error","El unombre ya se encuentra en usp."), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error","El unombre ya se encuentra en uso."), HttpStatus.FORBIDDEN);
         }
         playerRepository.save(new Player(username, passwordEncoder.encode(password)));
         return new ResponseEntity<>(HttpStatus.CREATED);
