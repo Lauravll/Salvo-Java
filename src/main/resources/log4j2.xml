@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss.SSS}][%p][%l]-%m%n" />
+        </Console>
+        <Routing name="Routing">
+            <Routes pattern="$${sd:type}">
+                <Route>
+                    <RollingFile name="RollingFile" fileName="C:\Users\admin\Desktop\logs\prueba.log"
+                                 filePattern="logs/log4j2-demo-%d{yyyy-MM-dd}-%i.log">
+                        <PatternLayout>
+                            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}][%p][%l]-%m%n</pattern>
+                        </PatternLayout>
+                        <SizeBasedTriggeringPolicy size="10 MB" />
+                        <DefaultRolloverStrategy max="8" />
+                    </RollingFile>
+                </Route>
+            </Routes>
+        </Routing>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Routing" />
+            <AppenderRef ref="Console" />
+        </Root>
+    </Loggers>
+</Configuration>
+
+        <!--
+        <?xml version="1.0" encoding="UTF-8"?>
+        <Configuration>
+            <Properties>
+                <Property name="package">com.codeoftheweb</Property>
+                <Property name="fileName">codeoftheweb.log</Property>
+                <Property name="pattern">%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5p] [%t] [%C{1}.%M] (%F:%L) - %m%n
+                </Property>
+                <Property name="logPath">/Users/Usuario/Desktop/logs/</Property>
+            </Properties>
+            <Appenders>
+
+                <RollingFile name="Prueba" fileName="${logPath}${fileName}" append="true"
+                             filePattern="${logPath}${fileName}.%d{yyyy-MM-dd}.%i">
+                    <PatternLayout pattern="${pattern}"/>
+                    <Filters>
+                        <ThresholdFilter level="WARN" />
+                   </Filters>
+                    <Policies>
+                        <TimeBasedTriggeringPolicy/>
+                        <SizeBasedTriggeringPolicy size="10 MB"/>
+                    </Policies>
+                    <DefaultRolloverStrategy max="9"/>
+                </RollingFile>
+
+                <Console name="STDOUT" target="SYSTEM_OUT">
+                    <PatternLayout pattern="${pattern}"/>
+                </Console>
+
+            </Appenders>
+
+            <Loggers>
+                <Logger name="${package}" level="INFO"/>
+                <Root level="INFO">
+                    <AppenderRef ref="STDOUT"/>
+                    <AppenderRef ref="Prueba"/>
+                </Root>
+            </Loggers>
+        </Configuration>
+
+        -->

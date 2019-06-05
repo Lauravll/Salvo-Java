@@ -1,5 +1,6 @@
 package com.codeoftheweb.salvo;
 
+import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,15 +14,13 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
+
 // Los handler (manejadores) indican a donde mandar la salida ya sea consola o archivo
 // En este caso ConsoleHandler envia los logs a la consola
-
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.FileHandler;
-import java.util.logging.SimpleFormatter;
 
 
 import static java.util.stream.Collectors.toList;
@@ -32,8 +31,12 @@ import static java.util.stream.Collectors.toList;
 @RequestMapping("/api")
 public class SalvoController {
 
-    private static final Logger LOGGER = Logger.getLogger(SalvoController.class.getName());
+    private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
+   // private static final Logger LOGGER = Logger.getLogger(SalvoController.class.getName());
+  // private static Logger LOGGER = LoggerFactory.getLogger(SalvoController.class.getName());
+    //private static Logger LOGGER = LogManager.getLogger(SalvoController.class.getName());
+    ///private Logger LOGGER = LogManager.getLogger(SalvoController.class.getName());
     //have one singleton instance that every class shares.
     //tells Spring to automatically create an instance of PersonRepository and store it in the instance variable personRepository.
     @Autowired
@@ -57,12 +60,17 @@ public class SalvoController {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         authentication = SecurityContextHolder.getContext().getAuthentication();
         Player authenticationPlayer = getAuthentication(authentication);
-        LOGGER.log(Level.INFO, () -> "Player autenticado -> " + authenticationPlayer);
-        LOGGER.info("Probando...");
-        LOGGER.setLevel(Level.INFO);
+        //LOGGER.log(Level.INFO, () -> "Player autenticado -> " + authenticationPlayer);
+
+        /*LOGGER.setLevel(Level.INFO);
         LOGGER.severe("Se ha producido un error");
         FileHandler fileXml = new FileHandler("Logging.xml");
-        LOGGER.addHandler(fileXml);
+        LOGGER.addHandler(fileXml);*/
+        //LOGGER.log(Level.INFO, () -> "Player autenticado -> " + authenticationPlayer);
+       // LOGGER.info("Initializing class client with properties ---> {}");
+        logger.info("Pruebo ");
+        logger.trace("Pruebo ");
+
         if (authenticationPlayer == null)
             dto.put("player", "Invitado");
         else
@@ -335,6 +343,11 @@ public class SalvoController {
         if (username.isEmpty() || password.isEmpty()) {
             return new ResponseEntity<>(makeMap("error", "Faltan datos"), HttpStatus.FORBIDDEN);
         }
+        if (username.length()>25)
+            return new ResponseEntity<>(makeMap("errorCaract", "Maximo de caracteres excedido"), HttpStatus.FORBIDDEN);
+
+        if (password.length()>25)
+            return new ResponseEntity<>(makeMap("errorc", "Maximo de caracteres excedido"), HttpStatus.FORBIDDEN);
         if (playerRepository.findByEmail(username) !=  null) {
             return new ResponseEntity<>(makeMap("error","El unombre ya se encuentra en uso."), HttpStatus.FORBIDDEN);
         }
